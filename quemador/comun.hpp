@@ -6,6 +6,7 @@
 
 #include <SPI.h>
 #include <MFRC522.h>
+#include <LiquidCrystal_I2C.h>
 
 enum ESTADOS {
     // Estado inicial del arduino.
@@ -56,6 +57,9 @@ enum EVENTOS {
     // Envia el dato de los permisos del empleado.
     PERMISOS_ENVIADO,
 
+    // Envia el rol del empleado.
+    ROL_ENVIADO,
+
     // Termina el grabado de datos.
     TERMINAR_GUARDADO_DATOS,
 };
@@ -90,6 +94,9 @@ enum FLAGS {
 // Instanciamos el sensor RC522.
 MFRC522 mfrc522(SS_PIN, RST_PIN);
 
+// Instanciamos el lcd.
+LiquidCrystal_I2C DISPLAY_LCD(0x27, 20, 4);
+
 // Instanciamos una llave para el RFID.
 MFRC522::MIFARE_Key keyA;
 MFRC522::MIFARE_Key keyB;
@@ -106,6 +113,7 @@ byte bufferRFIDEscritura[16];
 
 int ID_EMPLEADO;
 int PERMISO_EMPLEADO;
+int ROL_EMPLEADO;
 
 // Baud rate de comunicacion serial.
 unsigned long BAUD_RATE = 9600;

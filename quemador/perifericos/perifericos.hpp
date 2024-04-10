@@ -17,5 +17,14 @@ bool hayTarjetaPresente(void);
 // Autentificamos la tarjeta para la lectura.
 bool autentificarTarjetaEscritura(int);
 
+// Inicializamos la pantalla LCD.
+bool inicializarLCD(void);
+
+// Enviamos un texto para mostrar en el lcd.
+bool mostrarTexto(const char [], int = 0, int = 0, bool = false);
+
+bool blinkLCD(int = 500);
+
 // Incluimos las funciones.
 #include "./rc522.cpp"
+#include "./lcd.cpp"

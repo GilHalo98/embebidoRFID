@@ -58,11 +58,14 @@ bool guardarDatosTarjeta(void) {
     // Realizamos la escritura de los datos de la tarjeta.
     bool escrituraOK = false;
 
-    // Escribimos en el bloque 1, que representa el id del empleado.
+    // Guardamos en el bloque 1, que representa el id del empleado.
     escrituraOK = escrituraRFID(1, ID_EMPLEADO);
 
-    // Escribimos en el bloque 2, que representa los permisos del empleado.
+    // Guardamos en el bloque 2, que representa los permisos del empleado.
     escrituraOK = escrituraRFID(2, PERMISO_EMPLEADO);
+
+    // Guardamos en el bloque 3, que representa el rol del empleado.
+    escrituraOK = escrituraRFID(3, PERMISO_EMPLEADO);
 
     // Si la lectura fallo.
     if(!escrituraOK) {

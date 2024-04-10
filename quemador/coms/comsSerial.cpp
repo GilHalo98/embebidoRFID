@@ -37,3 +37,14 @@ int recivirDato(void) {
 
     return NULL;
 }
+
+void vaciarBuffer(void) {
+    // Vaciamos el buffer serial.
+    while(Serial.available() > 0) {
+        Serial.parseInt();
+    }
+
+    // Esperamos a que se envien los datos
+    // en el buffer.
+    Serial.flush();
+};

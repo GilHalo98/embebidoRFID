@@ -7,8 +7,6 @@ bool inicializarRFID(void) {
     * Inicializamos el RC522.
     */
 
-    // Serial.println("Inicializando RC522");
-
     // Inicializamos el PCD.
     mfrc522.PCD_Init();
 
@@ -110,7 +108,6 @@ bool autentificarTarjetaEscritura(int numeroBlock) {
     // Si se autentica exitosamente.
     if(statusRC522 == MFRC522::STATUS_OK) {
         return true;
-
     }
 
     return false;

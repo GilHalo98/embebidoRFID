@@ -26,6 +26,7 @@ void loop(void) {
             break;
 
         } case ESTADOS::ERROR_PERIFERICOS: {
+            errorPerifericos();
             break;
 
         } case ESTADOS::ESPERA_EVENTO: {
@@ -41,6 +42,7 @@ void loop(void) {
             break;
 
         } case ESTADOS::ERROR_AUTENTIFICACION: {
+            errorAutentificacion();
             break;
 
         } case ESTADOS::GUARDAR_DATOS_TARJETA: {
@@ -48,6 +50,7 @@ void loop(void) {
             break;
 
         } case ESTADOS::ERROR_ESCRITURA: {
+            errorEscritura();
             break;
 
         } case ESTADOS::ESCRITURA_FINALIZADA: {
@@ -58,8 +61,4 @@ void loop(void) {
             break;
         }
     }
-
-    // Esperamos 100ms para no generar lecturas falsas de los
-    // inputs.
-    delay(100);
 };

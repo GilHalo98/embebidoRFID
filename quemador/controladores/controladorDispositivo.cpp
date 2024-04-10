@@ -29,5 +29,10 @@ bool escrituraFinalizada(void) {
     // Enviamos una bandera de operación terminda.
     Serial.println(FLAGS::OPERACION_TERMINADA);
 
+    // Vaciamos el buffer serial.
+    vaciarBuffer();
+
+    mostrarTexto("ESCRITURA TERMINADA ", 0, 0, true);
+
     return true;
 }

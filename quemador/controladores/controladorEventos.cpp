@@ -89,7 +89,7 @@ bool esperarEvento(void) {
              * Evento de termino de guardado de datos del empleado.
              * */
 
-            mostrarTexto("INGRESA LA TARJETA..", 0, 0);
+            mostrarTexto(">INGRESA LA TARJETA<", 0, 0);
 
             // Cambiamos de estado al de espera de ingreso de tarjeta.
             estado = ESTADOS::ESPERA_TARJETA;

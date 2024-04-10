@@ -23,8 +23,18 @@ bool guardarDatosTarjeta(void);
 // Indica la finalización de la escritura de la tarjeta de manera exitosa.
 bool escrituraFinalizada(void);
 
+// Error de escritura de tarjeta.
+bool errorEscritura(void);
+
+// Error con perifericos.
+bool errorPerifericos(void);
+
+// Error de perifericos.
+bool errorAutentificacion(void);
+
 // Incluimos las funciones del control de estados.
 #include "./controladorEventos.cpp"
 #include "./controladorInicializacion.cpp"
 #include "./controladorRFID.cpp"
 #include "./controladorDispositivo.cpp"
+#include "./controladorError.cpp"

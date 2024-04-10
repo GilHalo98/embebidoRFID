@@ -101,6 +101,11 @@ LiquidCrystal_I2C DISPLAY_LCD(0x27, 20, 4);
 MFRC522::MIFARE_Key keyA;
 MFRC522::MIFARE_Key keyB;
 
+// Bloques de datos.
+int BLOCK_ID = 4;
+int BLOCK_PERMISOS = 5;
+int BLOCK_ROL = 6;
+
 // Instanciamos un status para el RFID.
 MFRC522::StatusCode statusRC522;
 
@@ -117,3 +122,7 @@ int ROL_EMPLEADO;
 
 // Baud rate de comunicacion serial.
 unsigned long BAUD_RATE = 9600;
+
+
+// Bandera que indica si esta esperando tarjeta.
+bool toggleIndicador = false;

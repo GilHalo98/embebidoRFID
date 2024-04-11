@@ -41,7 +41,7 @@ bool checarPorConfiguracionBOOT() {
     // Mandamos un evento de espera por confirmacion de configuracion.
     Serial.println("Espera por evento...");
 
-    delay(5000);
+    delay(2000);
 
     // Si hay datos en buffer recividos.
     if(Serial.available() > 0) {

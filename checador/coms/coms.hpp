@@ -30,18 +30,6 @@ bool inicializarSockets(void);
 // Reporta el status actual del dispositivo.
 bool reportarEstatusDispositivo(void);
 
-// Reporta el intento de acceso y la resolucion de
-// este por medio de sockets.
-bool enviarPeticionAcceso(void);
-
-// Reporta el intento de acceso, bloqueo y la resolucion de
-// este por medio de sockets.
-bool enviarPeticionAccesoBloqueo(void);
-
-// Reporta el intento de acceso, desbloqueo y la resolucion de
-// este por medio de sockets.
-bool enviarPeticionAccesoDesbloqueo(void);
-
 // Procesamos los eventos personalizados que lleguen por sockets,
 // esto se hace con un interruptor.
 bool procesarEventosPersonalizados(void);

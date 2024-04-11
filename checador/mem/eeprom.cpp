@@ -45,12 +45,6 @@ bool guardarConfiguracion(void) {
         configuracion.versionApi, VERSION_API.length() + 1
     );
 
-    // Guardamos la accion opcional del dispositivo.
-    configuracion.accionOpcional = ACCION_OPCIONAL;
-
-    // Guardamos el bit del permiso pedido en la configuración.
-    configuracion.permisoPedido = PERMISO_PEDIDO;
-
     // Guardamos el puerto del servidor api en la configuración.
     configuracion.portApi = PORT_API;
 
@@ -72,9 +66,6 @@ bool cargarConfiguracion(void) {
     EEPROM.get(0, configuracion);
 
     // Cargamos el bit del permiso de la configuración.
-    PERMISO_PEDIDO = configuracion.permisoPedido;
-
-    // Cargamos el bit del permiso de la configuración.
     PORT_API = configuracion.portApi;
 
     // Cargamos la SSID en el string.
@@ -92,8 +83,24 @@ bool cargarConfiguracion(void) {
     // Cargamos la version del servidor api en la configuracion.
     VERSION_API = configuracion.versionApi;
 
-    // Cargamos la accion opcional del dispositivo.
-    ACCION_OPCIONAL = configuracion.accionOpcional;
+    Serial.print("[PUERTO]: ");
+    Serial.println(PORT_API);
+
+    Serial.print("[SSID]: ");
+    Serial.println(SSID);
+
+    Serial.print("[PASS]: ");
+    Serial.println(PASSWORD);
+
+    Serial.print("[TOKEN]: ");
+    Serial.println(ACCESS_TOKEN);
+
+    Serial.print("[IP]: ");
+    Serial.println(IP_API);
+
+
+    Serial.print("[VER]: ");
+    Serial.println(VERSION_API);
 
     return true;
 };

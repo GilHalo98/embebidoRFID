@@ -6,21 +6,9 @@ bool configurarVariables(void) {
     /*
     * Controlador para configuar las variables del dispositivo.
     **/
+
     switch(checarPorEvento()) {
-        case EVENTOS::CAMBIAR_PERMISO_PEDIDO: {
-            Serial.print("Ingresa el bit de permiso: ");
-            if(Serial.available() > 0) {
-                PERMISO_PEDIDO = Serial.parseInt();
-
-                Serial.println(PERMISO_PEDIDO);
-            } else {
-                Serial.println("No hay informacion recivida");
-            }
-            Serial.println("\r\n");
-            Serial.println(FLAGS::ESCRITURA_TERMINADA);
-            break;
-
-        } case EVENTOS::CAMBIAR_SSID: {
+        case EVENTOS::CAMBIAR_SSID: {
             // Este se unira con el de cambiar password y se creara
             // un ESTADO unico para la configuracion de los datos.
             Serial.print("Ingresa el SSID: ");
@@ -106,19 +94,6 @@ bool configurarVariables(void) {
             Serial.println(FLAGS::ESCRITURA_TERMINADA);
             break;
 
-        } case EVENTOS::CAMBIAR_ACCION_OPCIONAL: {
-            Serial.print("Ingresa la ACCION OPCIONAL: ");
-            if(Serial.available() > 0) {
-                ACCION_OPCIONAL = Serial.parseInt();
-
-                Serial.println(ACCION_OPCIONAL);
-            } else {
-                Serial.println("No hay informacion recivida");
-            }
-            Serial.println("\r\n");
-            Serial.println(FLAGS::ESCRITURA_TERMINADA);
-            break;
-
         } case EVENTOS::FINALIZAR_CONFIGURACION: {
             Serial.println("Guardando configuracion...");
 
@@ -141,6 +116,8 @@ bool configurarVariables(void) {
            break;
         }
     }
+
+    delay(1000);
 
     return true;
 }

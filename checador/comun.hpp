@@ -10,6 +10,7 @@
 
 // Librerias incluidas
 #include <SPI.h>
+#include <Wire.h>
 #include <EEPROM.h>
 #include <MFRC522.h>
 #include <WiFiClient.h>
@@ -17,18 +18,13 @@
 #include <ESP8266WiFi.h>
 #include <SocketIOclient.h>
 #include <ESP8266HTTPClient.h>
+#include <LiquidCrystal_I2C.h>
 
 // Estructura que almacena la informacion de configuración del
 // dispositivo y la red.
 struct CONFIGURACION_DISPOSITIVO {
-    // Permiso requerido por el dispositivo.
-    int permisoPedido;
-
     // Puerto del servidor API.
     int portApi;
-
-    // Acciones opcionales.
-    int accionOpcional;
 
     // Access token.
     char accessToken[255];
@@ -100,15 +96,8 @@ enum ESTADOS {
     // Estado de reporte de datos no se encuentran en registro.
     REPORTE_DATOS_NO_COINCIDEN_CON_REGISTRO,
 
-    // Estado de validacion de acceso.
-    VALIDAR_ACCESO_EMPLEADO,
-
-    // Estado de envio de evento de ESTADO de acceso por medio del bus I2C.
-    ENVIAR_EVENTO_ACCESO,
-
-    // Estado de reporte de registro de reporte del ESTADO de
-    // acceso del empleado.
-    REPORTE_ACCESO,
+    // Estado de registro de reporte de chequeo de empleado.
+    REPORTE_CHEQUEO,
 };
 
 enum EVENTOS {
@@ -121,9 +110,6 @@ enum EVENTOS {
 
     // Evento de verificacion de configuracion.
     INICIAR_CONFIGURACION,
-
-    // Cambia el bit de permiso pedido por el dispositivo.
-    CAMBIAR_PERMISO_PEDIDO,
 
     // Evento para cambiar el SSID de la red.
     CAMBIAR_SSID,
@@ -143,32 +129,8 @@ enum EVENTOS {
     // Cambia el access token del dispositvo.
     CAMBIAR_ACCESS_TOKEN,
 
-    // Cambia la accion opcional del dispositivo.
-    CAMBIAR_ACCION_OPCIONAL,
-
     // Evento de finalizacion de configuracion
     FINALIZAR_CONFIGURACION
-};
-
-enum TIPOS_REPORTES {
-    /*
-     * Enumerador de los tipos de reportes.
-     * */
-
-    // El index 0 en los tipos de reportes no existe.
-    REPORTE_INEXISTENTE,
-
-    // Reporte de acceso garantizado a zona.
-    EMPLEADO_ACCESO_GARANTIZADO,
-
-    // Reporte de acceso negado a zona.
-    EMPLEADO_ACCESO_NEGADO,
-
-    // Reporte de tarjeta invalida ingresada.
-    INGRESO_TARJETA_INVALIDA,
-
-    // Reporte de datos de la tarjeta no coiniciden con registro.
-    DATOS_NO_COINCIDEN
 };
 
 enum FLAGS {
@@ -213,21 +175,6 @@ enum ESTATUS {
     LIBRE_5 = 0b10000000,
 };
 
-enum ACCIONES_OPCIONALES {
-    /*
-    * Acciones opcionales del dispositivo.
-    */
-
-    // No realiza ninguna accion opcional.
-    NINGUNA,
-
-    // Bloquea la puerta.
-    BLOQUEAR_PUERTA_AL_CERRAR,
-
-    // Desbloquea la puerta.
-    DESBLOQUEAR_PUERTA_AL_ABRIR
-};
-
 // Instanciamos el cliente socketIO.
 SocketIOclient Socket;
 
@@ -246,6 +193,9 @@ int BLOCK_ROL = 6;
 // Instanciamos un status para el RFID.
 MFRC522::StatusCode STATUS_RC522;
 
+// Instanciamos el lcd.
+LiquidCrystal_I2C DISPLAY_LCD(0x27, 20, 4);
+
 // Establece el ESTADO actual del esp8266.
 ESTADOS ESTADO;
 ESTADOS ESTADO_ANTERIOR;
@@ -259,11 +209,9 @@ String EVENTO_RECIVIDO;
 
 // Buffer para el sensor RFID.
 byte bufferID[18];
-byte bufferPermisos[18];
 
 // Datos que se encuentran en la tarjeta.
 String ID_EMPLEADO;
-byte ACCESOS;
 
 // Definimos la dimencion del vector de direcciones a usar en la EEPROM
 const int DIMENCION_EEPROM = 2048;
@@ -276,15 +224,6 @@ const int TIEMPO_ESPERA = 2000;
 
 // BaudRate de comunicacion serial.
 unsigned long BAUD = 115200;
-
-// Indica si el permiso de acceso fue garantizado o negado.
-bool ACCESO_GARANTIZADO = false;
-
-// Accion opcional del lector.
-int ACCION_OPCIONAL = 0;
-
-// Bit de acceso pedido.
-int PERMISO_PEDIDO = 0;
 
 // Configuracion de la red.
 String SSID = "";

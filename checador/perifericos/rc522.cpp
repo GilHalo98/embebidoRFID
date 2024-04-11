@@ -40,9 +40,7 @@ bool limpiarBufferRFID(void) {
 
     mfrc522.PICC_HaltA();
     mfrc522.PCD_StopCrypto1();
-    ACCESO_GARANTIZADO = false;
     ID_EMPLEADO = "";
-    ACCESOS = 0;
 
     return true;
 };
@@ -56,27 +54,7 @@ bool lecturaRFID(void) {
     byte size = sizeof(bufferID);
 
     // Realizamos la lectua del bloque.
-    STATUS_RC522 = mfrc522.MIFARE_Read(
-        BLOCK_ID,
-        bufferID,
-        &size
-    );
-
-    // Si la lectura no fue existosa.
-    if(STATUS_RC522 != MFRC522::STATUS_OK) {
-        // mandamos el ESTADO a error de lectura.
-        return false;
-    }
-
-    // Calculamos el tamaño del buffer de los permisos.
-    size = sizeof(bufferPermisos);
-
-    // Realizamos la lectua del bloque.
-    STATUS_RC522 = mfrc522.MIFARE_Read(
-        BLOCK_PERMISOS,
-        bufferPermisos,
-        &size
-    );
+    STATUS_RC522 = mfrc522.MIFARE_Read(BLOCK_ID, bufferID, &size);
 
     // Si la lectura no fue existosa.
     if(STATUS_RC522 != MFRC522::STATUS_OK) {
@@ -86,9 +64,6 @@ bool lecturaRFID(void) {
 
     // Guardamos el id del empleado extraido.
     ID_EMPLEADO = String(bufferID[0], DEC);
-
-    // Guardamos el permiso del empelado extraido.
-    ACCESOS = bufferPermisos[0];
 
     return true;
 };

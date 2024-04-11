@@ -17,7 +17,7 @@ bool validarExistenciaEmpleado(void) {
         // Si el codigo es 0, no hubo problema en la consulta.
         if(validacion.codigoRespuesta == 0) {
             // Cambiamos el ESTADO para la validacion de permisos.
-            ESTADO = ESTADOS::VALIDAR_ACCESO_EMPLEADO;
+            ESTADO = ESTADOS::REPORTE_CHEQUEO;
 
         } else {
             // Si no existe, cambiamos el ESTADO a registro inexistente.
@@ -33,31 +33,16 @@ bool validarExistenciaEmpleado(void) {
     return true;
 };
 
-bool registrarReporteAcceso(void) {
+bool reporteChequeo(void) {
     /*
-    * Genera un reporte de acceso del
-    * area en cuestion.
+    * Genera un reporte de chequeo del empleado.
     **/
 
-    // Inicializamos el tipo de reporte a registrar como de acceso negado.
-    TIPOS_REPORTES tipoReporte = TIPOS_REPORTES::EMPLEADO_ACCESO_NEGADO;
-
-    // Inicializamos el contenido del reporte.
-    String contenidoReporte = String("Peticion de acceso a zona");
-
-    // Si se garantizo el acceso.
-    if(ACCESO_GARANTIZADO) {
-        // Cambiamos el tipo de reporte a registrar como de acceso garantizado.
-        tipoReporte = TIPOS_REPORTES::EMPLEADO_ACCESO_GARANTIZADO;
-    }
 
     // Realizamos el registro del reporte.
-    respuestaIoT respuesta = registrarReporteAcceso(
-        tipoReporte,
-        contenidoReporte
-    );
+    respuestaIoT respuesta = registrarReporteChequeo();
 
-    // Si el codigo de la respuesta es menor que 0, ocurrio un problema con
+    // Si el codigo de la respuesta es menor que 0, ocuio un problema con
     // el API.
     if(respuesta.codigoRespuesta >= 0) {
         // Si el codigo es 0, no hubo problema en la consulta.

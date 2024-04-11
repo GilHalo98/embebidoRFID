@@ -8,7 +8,23 @@ bool enviarEventoAcceso(void) {
     **/
 
     // Se envia el evento de acceso por sockets.
-    enviarPeticionAcceso();
+    switch(ACCION_OPCIONAL) {
+        case ACCIONES_OPCIONALES::NINGUNA: {
+            enviarPeticionAcceso();
+            break;
+
+        } case ACCIONES_OPCIONALES::BLOQUEAR_PUERTA_AL_CERRAR: {
+            enviarPeticionAccesoBloqueo();
+            break;
+
+        } case ACCIONES_OPCIONALES::DESBLOQUEAR_PUERTA_AL_ABRIR: {
+            enviarPeticionAccesoDesbloqueo();
+            break;
+
+        } default: {
+            break;
+        }
+    }
 
     // Se cambia el ESTADO al de registro de reporte de acceso.
     ESTADO = ESTADOS::REPORTE_ACCESO;

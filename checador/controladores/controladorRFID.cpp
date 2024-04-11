@@ -33,13 +33,11 @@ bool autentificarTarjeta(void) {
 
     // Autentificamos los bloques de los datos del empleado en la tarjeta.
     if(autentificarTarjetaLectura(BLOCK_ID)) {
-        if(autentificarTarjetaLectura(BLOCK_PERMISOS)) {
-            // Si los datos fueron autentificados exitosamente
-            // se pasa al ESTADO de lectura de tarjeta.
-            ESTADO = ESTADOS::LEER_DATOS_TARJETA;
+        // Si los datos fueron autentificados exitosamente
+        // se pasa al ESTADO de lectura de tarjeta.
+        ESTADO = ESTADOS::LEER_DATOS_TARJETA;
 
-            return true;
-        }
+        return true;
     }
 
     // Si no, entonces se pasa al ESTADO de error de autentificacion

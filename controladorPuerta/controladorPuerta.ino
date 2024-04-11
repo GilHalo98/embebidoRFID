@@ -49,6 +49,9 @@ void loop(void) {
         // Mandamos el status del dispositivo.
         reportarEstatusDispositivo();
 
+        // Mostramos el estatus actual desde la torreta.
+        mostrarEstatusTorreta();
+
         // El estatus anterior lo tomamos del estatus actual.
         ESTATUS_DISPOSITIVO_ANTERIOR = ESTATUS_DISPOSITIVO;
     }
@@ -57,7 +60,7 @@ void loop(void) {
     // parpadeamos el led del node.
     if(IDENTIFICARSE) {
         if(millis() % FRECUENCIA_PARPADEO == 0) {
-            toggleGPIO(NODE_LED);
+            toggleGPIO(LED_IDENTIFICACION);
         }
     }
 

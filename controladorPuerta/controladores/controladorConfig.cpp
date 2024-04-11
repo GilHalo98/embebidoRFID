@@ -8,20 +8,7 @@ bool configurarVariables(void) {
     **/
 
     switch(checarPorEvento()) {
-        case EVENTOS::CAMBIAR_PERMISO_PEDIDO: {
-            Serial.print("Ingresa el bit de permiso: ");
-            if(Serial.available() > 0) {
-                // PERMISO_PEDIDO = Serial.parseInt();
-
-                Serial.println(Serial.parseInt());
-            } else {
-                // Serial.println("No hay informacion recivida");
-            }
-            Serial.println("\r\n");
-            Serial.println(FLAGS::ESCRITURA_TERMINADA);
-            break;
-
-        } case EVENTOS::CAMBIAR_SSID: {
+        case EVENTOS::CAMBIAR_SSID: {
             // Este se unira con el de cambiar password y se creara
             // un ESTADO unico para la configuracion de los datos.
             Serial.print("Ingresa el SSID: ");
@@ -72,20 +59,6 @@ bool configurarVariables(void) {
                 IP_API.replace("\r", "");
 
                 Serial.println(IP_API);
-            } else {
-                Serial.println("No hay informacion recivida");
-            }
-            Serial.println("\r\n");
-            Serial.println(FLAGS::ESCRITURA_TERMINADA);
-            break;
-
-        } case EVENTOS::CAMBIAR_VERSION_API: {
-            Serial.print("Ingresa el URL de la version API: ");
-            if(Serial.available() > 0) {
-                // VERSION_API = Serial.readString();
-                // VERSION_API.replace("\r", "");
-
-                Serial.println(Serial.readString());
             } else {
                 Serial.println("No hay informacion recivida");
             }

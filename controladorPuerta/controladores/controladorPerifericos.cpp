@@ -22,7 +22,7 @@ bool esperarApertura(void) {
 
             // Cambiamos el estatus del dispositivo
             // a desocupado.
-            ESTATUS_DISPOSITIVO = ESTATUS::DESOCUPADO;
+            ESTATUS_DISPOSITIVO = ESTATUS::LIBRE;
         }
     }
 
@@ -46,7 +46,7 @@ bool esperarCierre(void) {
 
         // Cambiamos el estatus del dispositivo
         // a desocupado.
-        ESTATUS_DISPOSITIVO = ESTATUS::DESOCUPADO;
+        ESTATUS_DISPOSITIVO = ESTATUS::LIBRE;
     }
 
     return true;

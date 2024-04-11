@@ -7,7 +7,7 @@ namespace ENDPOINTS {
     */
 
     // Endpoint de validacion de empleados.
-    const char* validarRegistroEmpleado = "IoT/validar/empleado";
+    const char* validarRegistroEmpleado = "IoT/validar/registro/empleado";
 
     // Endpoint de registro de reportes.
     const char* registrarReporteAcceso = "IoT/registrar/reporte/acceso";
@@ -24,7 +24,7 @@ namespace ENDPOINTS {
 respuestaIoT validarRegistroEmpleado(void);
 
 // Prototipo de funcion que registra un reporte de acceso.
-respuestaIoT registrarReporteAcceso(TIPOS_REPORTES, String);
+respuestaIoT registrarReporteAcceso(void);
 
 // Prototipo de funcion que registra un reporte de error de autentificacion de tarjeta.
 respuestaIoT registrarReporteErrorAutentificacionTarjeta(void);

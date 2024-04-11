@@ -33,3 +33,19 @@ bool toggleGPIO(int pin) {
 
     return true;
 };
+
+bool mostrarEstatusTorreta(void) {
+    /*
+    * Mostramos el estatus del dispositivo por medio de la torreta.
+    */
+    if(ESTATUS_DISPOSITIVO == ESTATUS::BLOQUEADO) {
+        digitalWrite(RELE_4, HIGH);
+        digitalWrite(RELE_3, LOW);
+
+    } else {
+        digitalWrite(RELE_4, LOW);
+        digitalWrite(RELE_3, HIGH);
+    }
+
+    return true;
+};

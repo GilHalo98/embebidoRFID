@@ -45,7 +45,7 @@ bool errorInicializacionPerifericos(void);
 bool validarExistenciaEmpleado(void);
 
 // Registra un reporte de acceso.
-bool registrarReporteAcceso(void);
+bool reporteAcceso(void);
 
 // Registra un reporte de fallos con perifericos.
 bool reporteFalloPerifericos(void);

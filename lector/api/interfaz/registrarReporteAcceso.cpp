@@ -2,10 +2,7 @@
  * Interfaz de endpoint de registro de reporte.
  * */
 
-respuestaIoT registrarReporteAcceso(
-    TIPOS_REPORTES tipoReporte,
-    String descripcionReporte
-) {
+respuestaIoT registrarReporteAcceso(void) {
     /*
     * Función de consulta de usuarios de la API.
     */
@@ -45,10 +42,9 @@ respuestaIoT registrarReporteAcceso(
         // Generamos el cuerpo del post.
         String body = String("idEmpleadoVinculado=")
             + String(ID_EMPLEADO)
-            + String("&descripcionReporte=")
-            + String(descripcionReporte)
-            + String("&idTipoReporteVinculado=")
-            + String(tipoReporte);
+
+            + String("&resolucion=")
+            + String(ACCESO_GARANTIZADO);
 
         Serial.print("[HTTP] POST...\n");
 

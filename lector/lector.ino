@@ -135,7 +135,7 @@ void loop(void) {
                 break;
 
             } case ESTADOS::REPORTE_ACCESO: {
-                registrarReporteAcceso();
+                reporteAcceso();
                 break;
 
             } default: {

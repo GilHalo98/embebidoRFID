@@ -152,7 +152,7 @@ bool procesarEventosPersonalizados(void) {
         // Si el evento es de tipo toggle_identificarse.
         else if(evento == "toggle_identificarse") {
             if(IDENTIFICARSE) {
-                digitalWrite(NODE_LED, HIGH);
+                digitalWrite(LED_IDENTIFICACION, HIGH);
             }
 
             // Hacemos toggle a la variable que indica al dispostivo
@@ -187,6 +187,16 @@ bool procesarEventosPersonalizados(void) {
             // Indicamos que se realizara la secuencia completa de
             // apertura/cierre de puerta.
             EJECUTAR_SECUENCIA_COMPLETA = false;
+
+        // Si el evento es de tipo bloquear_puerta bloqueamos la apertura
+        // de la puerta.
+        } else if(evento == "bloquear_puerta") {
+            ESTATUS_DISPOSITIVO = ESTATUS::BLOQUEADO;
+
+        // Si el evento es de tipo desbloquear_puerta bloqueamos la apertura
+        // de la puerta.
+        } else if(evento == "desbloquear_puerta") {
+            ESTATUS_DISPOSITIVO = ESTATUS::LIBRE;
         }
     }
 

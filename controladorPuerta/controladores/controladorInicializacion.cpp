@@ -34,7 +34,7 @@ bool inicializarPerifericos(void) {
         ESTADO = ESTADOS::ESPERA_EVENTO;
 
         // Cambiamos el status del dispositivo.
-        ESTATUS_DISPOSITIVO = ESTATUS::DESOCUPADO;
+        ESTATUS_DISPOSITIVO = ESTATUS::LIBRE;
 
     } else {
         // Cambiamos al ESTADO de error de perifericos.

@@ -20,7 +20,7 @@ respuestaIoT validarRegistroEmpleado(void) {
         + String(PORT_API)
         + String(VERSION_API)
         + String(ENDPOINTS::validarRegistroEmpleado)
-        + String("?id=")
+        + String("?idEmpleadoVinculado=")
         + String(ID_EMPLEADO);
 
     // Instanciamos el modelo de la respuesta del servidor.
@@ -44,11 +44,15 @@ respuestaIoT validarRegistroEmpleado(void) {
 
         // Verificamos que el codigo http sea valido.
         if(httpCode > 0) {
-            // HTTP header has been send and Server response header has been handled
+            // HTTP header has been send and Server
+            // response header has been handled
             Serial.printf("[HTTP] GET... code: %d\n", httpCode);
 
             // Se evalua la validez del codigo retornado.
-            if(httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY) {
+            if(
+                httpCode == HTTP_CODE_OK
+                || httpCode == HTTP_CODE_MOVED_PERMANENTLY
+            ) {
                 // Si el codigo es OK (200) entonces la peticion
                 // se realizo con exito.
 
@@ -65,13 +69,20 @@ respuestaIoT validarRegistroEmpleado(void) {
                 // Mostramos la respuesta por el monitor serial.
                 // serializeJson(bufferJson, Serial);
 
-                // Agregamos el codigo de respuesta del API al modelo de la respuesta.
-                respuesta.codigoRespuesta = bufferJson["codigoRespuesta"].as<int>();
+                // Agregamos el codigo de respuesta del
+                // API al modelo de la respuesta.
+                respuesta.codigoRespuesta = bufferJson[
+                    "codigoRespuesta"
+                ].as<int>();
             }
 
         } else {
-            // Si el codigo no es valido, la peticion retorna un codigo http invalido.
-            Serial.printf("[HTTP] GET... failed, error: %s\n", consultaHTTP.errorToString(httpCode).c_str());
+            // Si el codigo no es valido, la peticion
+            // retorna un codigo http invalido.
+            Serial.printf(
+                "[HTTP] GET... failed, error: %s\n",
+                consultaHTTP.errorToString(httpCode).c_str()
+            );
         }
 
         // Terminamos la consulta http.

@@ -150,27 +150,6 @@ enum EVENTOS {
     FINALIZAR_CONFIGURACION
 };
 
-enum TIPOS_REPORTES {
-    /*
-     * Enumerador de los tipos de reportes.
-     * */
-
-    // El index 0 en los tipos de reportes no existe.
-    REPORTE_INEXISTENTE,
-
-    // Reporte de acceso garantizado a zona.
-    EMPLEADO_ACCESO_GARANTIZADO,
-
-    // Reporte de acceso negado a zona.
-    EMPLEADO_ACCESO_NEGADO,
-
-    // Reporte de tarjeta invalida ingresada.
-    INGRESO_TARJETA_INVALIDA,
-
-    // Reporte de datos de la tarjeta no coiniciden con registro.
-    DATOS_NO_COINCIDEN
-};
-
 enum FLAGS {
     /*
     * Banderas del estado del dispositivo y las operaciones de este.

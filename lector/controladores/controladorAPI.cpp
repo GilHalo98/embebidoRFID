@@ -33,29 +33,14 @@ bool validarExistenciaEmpleado(void) {
     return true;
 };
 
-bool registrarReporteAcceso(void) {
+bool reporteAcceso(void) {
     /*
     * Genera un reporte de acceso del
     * area en cuestion.
     **/
 
-    // Inicializamos el tipo de reporte a registrar como de acceso negado.
-    TIPOS_REPORTES tipoReporte = TIPOS_REPORTES::EMPLEADO_ACCESO_NEGADO;
-
-    // Inicializamos el contenido del reporte.
-    String contenidoReporte = String("Peticion de acceso a zona");
-
-    // Si se garantizo el acceso.
-    if(ACCESO_GARANTIZADO) {
-        // Cambiamos el tipo de reporte a registrar como de acceso garantizado.
-        tipoReporte = TIPOS_REPORTES::EMPLEADO_ACCESO_GARANTIZADO;
-    }
-
     // Realizamos el registro del reporte.
-    respuestaIoT respuesta = registrarReporteAcceso(
-        tipoReporte,
-        contenidoReporte
-    );
+    respuestaIoT respuesta = registrarReporteAcceso();
 
     // Si el codigo de la respuesta es menor que 0, ocurrio un problema con
     // el API.
@@ -66,6 +51,9 @@ bool registrarReporteAcceso(void) {
             ESTADO = ESTADOS::ESPERA_TARJETA;
 
         } else {
+            Serial.print("[");
+            Serial.print(respuesta.codigoRespuesta);
+            Serial.println("]");
             // Si ocurrio un problema  con el registro del reporte
             // se cambia el ESTADO al ESTADO de fallo de registro.
             ESTADO = ESTADOS::REGISTRO_REPORTE_FALLIDO;

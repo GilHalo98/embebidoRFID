@@ -3,6 +3,7 @@
 // Pines de salida usados.
 #define ESP_LED 2 // Color AZUL
 #define NODE_LED 16   // Color ROJO
+#define LED_IDENTIFICACION 2
 
 // Pines del GPIO a usar.
 #define RELE_1 5
@@ -97,9 +98,6 @@ enum EVENTOS {
     // Evento de verificacion de configuracion.
     INICIAR_CONFIGURACION,
 
-    // Cambia el bit de permiso pedido por el dispositivo.
-    CAMBIAR_PERMISO_PEDIDO,
-
     // Evento para cambiar el SSID de la red.
     CAMBIAR_SSID,
 
@@ -111,9 +109,6 @@ enum EVENTOS {
 
     // Cambia la ip del servidor API.
     CAMBIAR_IP_API,
-
-    // Cambia el url de la version del API a usar.
-    CAMBIAR_VERSION_API,
 
     // Cambia el access token del dispositvo.
     CAMBIAR_ACCESS_TOKEN,
@@ -154,11 +149,11 @@ enum ESTATUS {
     DESCONECTADO = 0b00000000,
 
     CONECTADO = 0b00000001,
-    DESOCUPADO = 0b00000010,
+    LIBRE = 0b00000010,
     PERIFERICOS_NO_INICIALIZADOS = 0b00000100,
     OCUPADO = 0b00001000,
+    BLOQUEADO = 0b00010000,
 
-    LIBRE_2 = 0b00010000,
     LIBRE_3 = 0b00100000,
     LIBRE_4 = 0b01000000,
     LIBRE_5 = 0b10000000,

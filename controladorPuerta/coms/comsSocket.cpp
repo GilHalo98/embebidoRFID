@@ -187,16 +187,54 @@ bool procesarEventosPersonalizados(void) {
             // Indicamos que se realizara la secuencia completa de
             // apertura/cierre de puerta.
             EJECUTAR_SECUENCIA_COMPLETA = false;
+        }
 
         // Si el evento es de tipo bloquear_puerta bloqueamos la apertura
         // de la puerta.
-        } else if(evento == "bloquear_puerta") {
+        else if(evento == "bloquear_puerta") {
             ESTATUS_DISPOSITIVO = ESTATUS::BLOQUEADO;
-
+        }
+        
         // Si el evento es de tipo desbloquear_puerta bloqueamos la apertura
         // de la puerta.
-        } else if(evento == "desbloquear_puerta") {
+        else if(evento == "desbloquear_puerta") {
             ESTATUS_DISPOSITIVO = ESTATUS::LIBRE;
+        }
+
+        // Si el evento es ed tipo garantizar_acceso_bloquear realizamos
+        // el ciclo de abrir y cerrar puerta, pero bloqueamos la puerta.
+        else if(evento == "garantizar_acceso_bloquear") {
+            // Cambiamos el estado del dispositivo a realizar
+            // la accion programada.
+            ESTADO = ESTADOS::ABRIR_PUERTA;
+
+            // Cambiamos el estatus del dispositivo a ocupado.
+            ESTATUS_DISPOSITIVO = ESTATUS::OCUPADO;
+
+            // Indicamos que se bloqueara la puerta.
+            BLOQUEAR_PUERTA = true;
+
+            // Indicamos que se realizara la secuencia completa de
+            // apertura/cierre de puerta.
+            EJECUTAR_SECUENCIA_COMPLETA = true;
+        }
+
+        // Si el evento es ed tipo desbloquear_abrir_puerta realizamos
+        // el ciclo de abrir y cerrar puerta, pero desbloqueamos la puerta.
+        else if(evento == "desbloquear_abrir_puerta") {
+            // Cambiamos el estado del dispositivo a realizar
+            // la accion programada.
+            ESTADO = ESTADOS::ABRIR_PUERTA;
+
+            // Cambiamos el estatus del dispositivo a ocupado.
+            ESTATUS_DISPOSITIVO = ESTATUS::OCUPADO;
+
+            // Indicamos que se desbloqueara la puerta.
+            DESBLOQUEAR_PUERTA = true;
+
+            // Indicamos que se realizara la secuencia completa de
+            // apertura/cierre de puerta.
+            EJECUTAR_SECUENCIA_COMPLETA = true;
         }
     }
 

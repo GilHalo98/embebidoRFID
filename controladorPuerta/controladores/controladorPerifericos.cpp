@@ -9,21 +9,22 @@ bool abrirPuerta(void) {
 
 // Esperamos a que la puerta sea abierta.
 bool esperarApertura(void) {
-    if(millis() % 2000 == 0) {
-        digitalWrite(RELE_1, HIGH);
+    delay(2000);
 
-        if(EJECUTAR_SECUENCIA_COMPLETA) {
-            // Cambiamos el estado por espera de puerta abierta
-            // para el pase del empleado.
-            ESTADO = ESTADOS::ESPERA_PUERTA_ABIERTA;
-        } else {
-            // Cambiamos el estado por espera de evento.
-            ESTADO = ESTADOS::ESPERA_EVENTO;
+    digitalWrite(RELE_1, HIGH);
 
-            // Cambiamos el estatus del dispositivo
-            // a desocupado.
-            ESTATUS_DISPOSITIVO = ESTATUS::LIBRE;
-        }
+    if(EJECUTAR_SECUENCIA_COMPLETA) {
+        // Cambiamos el estado por espera de puerta abierta
+        // para el pase del empleado.
+        ESTADO = ESTADOS::ESPERA_PUERTA_ABIERTA;
+
+    } else {
+        // Cambiamos el estado por espera de evento.
+        ESTADO = ESTADOS::ESPERA_EVENTO;
+
+        // Cambiamos el estatus del dispositivo
+        // a desocupado.
+        ESTATUS_DISPOSITIVO = ESTATUS::LIBRE;
     }
 
     return true;
@@ -39,15 +40,30 @@ bool cerrarPuerta(void) {
 
 // Esperamos a que la puerta sea cerrada.
 bool esperarCierre(void) {
-    if(millis() % 2000 == 0) {
-        digitalWrite(RELE_2, HIGH);
-        // Cambiamos el estado por espera de evento.
-        ESTADO = ESTADOS::ESPERA_EVENTO;
+    delay(2000);
 
-        // Cambiamos el estatus del dispositivo
-        // a desocupado.
+    digitalWrite(RELE_2, HIGH);
+    // Cambiamos el estado por espera de evento.
+    ESTADO = ESTADOS::ESPERA_EVENTO;
+
+    // Cambiamos el estatus del dispositivo
+    // a desocupado.
+    ESTATUS_DISPOSITIVO = ESTATUS::LIBRE;
+
+    // Si se bloquea la puerta, se cambia el estatus del dispositivo.
+    if(BLOQUEAR_PUERTA) {
+        ESTATUS_DISPOSITIVO = ESTATUS::BLOQUEADO;
+    }
+
+    // Si se desbloquea la puerta, se cambia el estatus del dispositivo.
+    if(DESBLOQUEAR_PUERTA) {
         ESTATUS_DISPOSITIVO = ESTATUS::LIBRE;
     }
+
+    // Reseteamos las variables de bloquear
+    // y desbloquear puerta a falso.
+    BLOQUEAR_PUERTA = false;
+    DESBLOQUEAR_PUERTA = false;
 
     return true;
 };

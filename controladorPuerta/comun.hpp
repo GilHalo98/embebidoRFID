@@ -210,3 +210,9 @@ int FRECUENCIA_PARPADEO = 250;
 // Indica si se ejecutara la secuencia completa de apertura/cerrado
 // de la puerta.
 bool EJECUTAR_SECUENCIA_COMPLETA = true;
+
+// Indica si la puerta sera bloqueada.
+bool BLOQUEAR_PUERTA = false;
+
+// Indica si la puerta sera desbloqueada.
+bool DESBLOQUEAR_PUERTA = false;

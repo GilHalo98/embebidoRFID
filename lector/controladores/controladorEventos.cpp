@@ -7,6 +7,9 @@ bool enviarEventoAcceso(void) {
     * Envia un evento por medio de sockets.
     **/
 
+    Serial.print("Accion opcional: ");
+    Serial.println(ACCION_OPCIONAL);
+
     // Se envia el evento de acceso por sockets.
     switch(ACCION_OPCIONAL) {
         case ACCIONES_OPCIONALES::NINGUNA: {

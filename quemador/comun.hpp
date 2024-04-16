@@ -3,6 +3,7 @@
 // Pines del RC522.
 #define RST_PIN 9
 #define SS_PIN 10
+#define LED_IDENTIFICACION 2
 
 #include <SPI.h>
 #include <MFRC522.h>

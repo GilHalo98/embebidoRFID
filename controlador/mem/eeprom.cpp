@@ -48,6 +48,9 @@ bool guardarConfiguracion(void) {
     // Guardamos el puerto del servidor api en la configuración.
     configuracion.portApi = PORT_API;
 
+    // Guardamos el rol pedido en la configuracion.
+    configuracion.rolPedido = ROL_PEDIDO;
+
     // Ponemos la estructua en la memoria EEPROM, que en este
     // caso especifico es simulada por la memoria FLASH.
     EEPROM.put(0, configuracion);
@@ -64,6 +67,9 @@ bool cargarConfiguracion(void) {
 
     // Cargamos la configuración de la memoria EEPROM.
     EEPROM.get(0, configuracion);
+
+    // Cargamos el bit del rol de la configuración.
+    ROL_PEDIDO = configuracion.rolPedido;
 
     // Cargamos el bit del permiso de la configuración.
     PORT_API = configuracion.portApi;
@@ -83,24 +89,27 @@ bool cargarConfiguracion(void) {
     // Cargamos la version del servidor api en la configuracion.
     VERSION_API = configuracion.versionApi;
 
-    // Serial.print("[PUERTO]: ");
-    // Serial.println(PORT_API);
+    Serial.print("[ROL]: ");
+    Serial.println(ROL_PEDIDO);
 
-    // Serial.print("[SSID]: ");
-    // Serial.println(SSID);
+    Serial.print("[PUERTO]: ");
+    Serial.println(PORT_API);
 
-    // Serial.print("[PASS]: ");
-    // Serial.println(PASSWORD);
+    Serial.print("[SSID]: ");
+    Serial.println(SSID);
 
-    // Serial.print("[TOKEN]: ");
-    // Serial.println(ACCESS_TOKEN);
+    Serial.print("[PASS]: ");
+    Serial.println(PASSWORD);
 
-    // Serial.print("[IP]: ");
-    // Serial.println(IP_API);
+    Serial.print("[TOKEN]: ");
+    Serial.println(ACCESS_TOKEN);
+
+    Serial.print("[IP]: ");
+    Serial.println(IP_API);
 
 
-    // Serial.print("[VER]: ");
-    // Serial.println(VERSION_API);
+    Serial.print("[VER]: ");
+    Serial.println(VERSION_API);
 
     return true;
 };

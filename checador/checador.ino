@@ -58,7 +58,7 @@ void loop(void) {
     // parpadeamos el led del node.
     if(IDENTIFICARSE) {
         if(millis() % FRECUENCIA_PARPADEO == 0) {
-            toggleGPIO(NODE_LED);
+            toggleGPIO(LED_IDENTIFICACION);
         }
     }
 

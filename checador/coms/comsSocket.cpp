@@ -132,7 +132,7 @@ bool procesarEventosPersonalizados(void) {
         // Si el evento es de tipo toggle_identificarse.
         if(evento == "toggle_identificarse") {
             if(IDENTIFICARSE) {
-                digitalWrite(NODE_LED, HIGH);
+                digitalWrite(LED_IDENTIFICACION, HIGH);
             }
 
             // Hacemos toggle a la variable que indica al dispostivo

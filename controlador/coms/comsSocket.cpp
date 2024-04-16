@@ -109,75 +109,6 @@ bool reportarEstatusDispositivo(void) {
     return true;
 };
 
-bool enviarPeticionAcceso(void) {
-    // creat JSON message for Socket.IO (event)
-    DynamicJsonDocument buffer(1024);
-    JsonArray array = buffer.to<JsonArray>();
-
-    // add evnet name
-    // Hint: socket.on('event_name', ....
-    array.add("peticion_acceso");
-
-    // add payload (parameters) for the event
-    JsonObject param1 = array.createNestedObject();
-    param1["resolucion"] = (uint8_t) ACCESO_GARANTIZADO;
-
-    // JSON to String (serializion)
-    String output;
-    serializeJson(buffer, output);
-
-    // Send event
-    Socket.sendEVENT(output);
-
-    return true;
-};
-
-bool enviarPeticionAccesoBloqueo(void) {
-    // creat JSON message for Socket.IO (event)
-    DynamicJsonDocument buffer(1024);
-    JsonArray array = buffer.to<JsonArray>();
-
-    // add evnet name
-    // Hint: socket.on('event_name', ....
-    array.add("peticion_acceso_bloquear");
-
-    // add payload (parameters) for the event
-    JsonObject param1 = array.createNestedObject();
-    param1["resolucion"] = (uint8_t) ACCESO_GARANTIZADO;
-
-    // JSON to String (serializion)
-    String output;
-    serializeJson(buffer, output);
-
-    // Send event
-    Socket.sendEVENT(output);
-
-    return true;
-};
-
-bool enviarPeticionAccesoDesbloqueo(void) {
-    // creat JSON message for Socket.IO (event)
-    DynamicJsonDocument buffer(1024);
-    JsonArray array = buffer.to<JsonArray>();
-
-    // add evnet name
-    // Hint: socket.on('event_name', ....
-    array.add("peticion_acceso_desbloquear");
-
-    // add payload (parameters) for the event
-    JsonObject param1 = array.createNestedObject();
-    param1["resolucion"] = (uint8_t) ACCESO_GARANTIZADO;
-
-    // JSON to String (serializion)
-    String output;
-    serializeJson(buffer, output);
-
-    // Send event
-    Socket.sendEVENT(output);
-
-    return true;
-};
-
 bool procesarEventosPersonalizados(void) {
     /*
     * Procesamos los eventos personalizados que lleguen por sockets.
@@ -207,6 +138,17 @@ bool procesarEventosPersonalizados(void) {
             // Hacemos toggle a la variable que indica al dispostivo
             // identificarse.
             IDENTIFICARSE = !IDENTIFICARSE;
+        }
+
+        else if(evento == "activar") {
+            ESTATUS_DISPOSITIVO = ESTATUS::OCUPADO;
+            digitalWrite(RELE_1, HIGH);
+
+        }
+
+        else if(evento == "desactivar") {
+            ESTATUS_DISPOSITIVO = ESTATUS::LIBRE;
+            digitalWrite(RELE_1, LOW);
         }
     }
 

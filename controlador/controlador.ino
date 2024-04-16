@@ -34,7 +34,7 @@ void loop(void) {
     // Loop del socket, maneja los eventos que llegan.
     Socket.loop();
 
-    // Muestra el estado actual del dispositivo.
+    // Muestra e estado actual del dispositivo.
     if(ESTADO != ESTADO_ANTERIOR) {
         Serial.print("Estado actual: ");
         Serial.println(ESTADO);
@@ -61,7 +61,6 @@ void loop(void) {
             toggleGPIO(LED_IDENTIFICACION);
         }
     }
-
     // Cada que transcurra 100ms se actualizara el estado
     // del dispositivo.
     if(millis() % FRECUENCIA_ACTUALIZACION_MAIN == 0) {
@@ -126,16 +125,8 @@ void loop(void) {
                 reporteEmpleadoInexistente();
                 break;
 
-            } case ESTADOS::VALIDAR_ACCESO_EMPLEADO: {
-                validarAcceso();
-                break;
-
-            } case ESTADOS::ENVIAR_EVENTO_ACCESO: {
-                enviarEventoAcceso();
-                break;
-
-            } case ESTADOS::REPORTE_ACCESO: {
-                reporteAcceso();
+            } case ESTADOS::REPORTE_CHEQUEO: {
+                reporteChequeo();
                 break;
 
             } default: {

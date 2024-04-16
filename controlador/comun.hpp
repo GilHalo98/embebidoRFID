@@ -5,6 +5,12 @@
 #define NODE_LED 16   // Color ROJO
 #define LED_IDENTIFICACION 2
 
+// Pines del GPIO a usar.
+#define RELE_1 5
+#define RELE_2 4
+#define RELE_3 14
+#define RELE_4 12
+
 // Pines del RC522.
 #define RST_PIN 0  // D3
 #define SS_PIN 15  // D8
@@ -19,11 +25,13 @@
 #include <ESP8266WiFi.h>
 #include <SocketIOclient.h>
 #include <ESP8266HTTPClient.h>
-#include <LiquidCrystal_I2C.h>
 
 // Estructura que almacena la informacion de configuración del
 // dispositivo y la red.
 struct CONFIGURACION_DISPOSITIVO {
+    // Rol pedido para poder hacer uso del recurso
+    int rolPedido;
+
     // Puerto del servidor API.
     int portApi;
 
@@ -112,6 +120,9 @@ enum EVENTOS {
     // Evento de verificacion de configuracion.
     INICIAR_CONFIGURACION,
 
+    // Cambia el rol pedido por el dispositivo.
+    CAMBIAR_ROL_PEDIDO,
+
     // Evento para cambiar el SSID de la red.
     CAMBIAR_SSID,
 
@@ -194,9 +205,6 @@ int BLOCK_ROL = 6;
 // Instanciamos un status para el RFID.
 MFRC522::StatusCode STATUS_RC522;
 
-// Instanciamos el lcd.
-LiquidCrystal_I2C DISPLAY_LCD(0x27, 20, 4);
-
 // Establece el ESTADO actual del esp8266.
 ESTADOS ESTADO;
 ESTADOS ESTADO_ANTERIOR;
@@ -225,6 +233,9 @@ const int TIEMPO_ESPERA = 2000;
 
 // BaudRate de comunicacion serial.
 unsigned long BAUD = 115200;
+
+// Bit de rol pedido.
+int ROL_PEDIDO = 0;
 
 // Configuracion de la red.
 String SSID = "";

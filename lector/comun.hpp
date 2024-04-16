@@ -7,6 +7,7 @@
 // Pines del RC522.
 #define RST_PIN 0  // D3
 #define SS_PIN 15  // D8
+#define LED_IDENTIFICACION 2
 
 // Librerias incluidas
 #include <SPI.h>
@@ -182,16 +183,15 @@ enum ESTATUS {
     DESCONECTADO = 0b00000000,
 
     CONECTADO = 0b00000001,
-    DESOCUPADO = 0b00000010,
+    LIBRE = 0b00000010,
     PERIFERICOS_NO_INICIALIZADOS = 0b00000100,
     OCUPADO = 0b00001000,
+    BLOQUEADO = 0b00010000,
 
-    LIBRE_2 = 0b00010000,
     LIBRE_3 = 0b00100000,
     LIBRE_4 = 0b01000000,
     LIBRE_5 = 0b10000000,
 };
-
 enum ACCIONES_OPCIONALES {
     /*
     * Acciones opcionales del dispositivo.

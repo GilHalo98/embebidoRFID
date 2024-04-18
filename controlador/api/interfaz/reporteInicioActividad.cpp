@@ -1,10 +1,10 @@
 /*
- * Interfaz de endpoint de reporte de chequeo.
+ * Interfaz de endpoint de registro de reporte.
  * */
 
-respuestaIoT registrarReporteChequeo(void) {
+respuestaIoT INTERFAZ::registroReporteActividadIniciada(void) {
     /*
-    * Función de registro de reporte de chequeo.
+    * Función de consulta de usuarios de la API.
     */
 
     // Instanciamos el cliente WiFi.
@@ -19,7 +19,7 @@ respuestaIoT registrarReporteChequeo(void) {
         + String(":")
         + String(PORT_API)
         + String(VERSION_API)
-        + String(ENDPOINTS::registrarReporteChequeo);
+        + String(ENDPOINTS::registrarReporteActividadIniciada);
 
     // Instanciamos el modelo de la respuesta del servidor.
     respuestaIoT respuesta;
@@ -41,7 +41,9 @@ respuestaIoT registrarReporteChequeo(void) {
 
         // Generamos el cuerpo del post.
         String body = String("idEmpleadoVinculado=")
-            + String(ID_EMPLEADO);
+            + String(ID_EMPLEADO)
+            + String("&resolucion=")
+            + String(CREDENCIALES_VALIDAS);
 
         Serial.print("[HTTP] POST...\n");
 
@@ -50,8 +52,8 @@ respuestaIoT registrarReporteChequeo(void) {
 
         // Verificamos que el codigo http sea valido.
         if(httpCode > 0) {
-            // HTTP header has been send and
-            // Server response header has been handled
+            // HTTP header has been send and Server
+            // response header has been handled
             Serial.printf("[HTTP] POST... code: %d\n", httpCode);
 
             // Se evalua la validez del codigo retornado.
@@ -62,7 +64,8 @@ respuestaIoT registrarReporteChequeo(void) {
                 // Si el codigo es OK (200) entonces la peticion
                 // se realizo con exito.
 
-                // Recuperamos los datos de la consulta en formato String.
+                // Recuperamos los datos de la
+                // consulta en formato String.
                 String respuestaString = registroHTTP.getString();
 
                 // Instanciamos un buffer json.
@@ -75,8 +78,8 @@ respuestaIoT registrarReporteChequeo(void) {
                 // Mostramos la respuesta por el monitor serial.
                 // serializeJson(bufferJson, Serial);
 
-                // Agregamos el codigo de respuesta
-                // del API al modelo de la respuesta.
+                // Agregamos el codigo de respuesta del
+                // API al modelo de la respuesta.
                 respuesta.codigoRespuesta = bufferJson[
                     "codigoRespuesta"
                 ].as<int>();

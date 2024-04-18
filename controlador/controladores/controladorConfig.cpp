@@ -2,14 +2,13 @@
 * Controladores para la configuracion del dispositivo.
 **/
 
-bool configurarVariables(void) {
+bool CONTROLADOR_CONFIGURACION::configurarVariables(void) {
     /*
     * Controlador para configuar las variables del dispositivo.
     **/
-
-    switch(checarPorEvento()) {
+    switch(COMS_SERIAL::checarPorEvento()) {
         case EVENTOS::CAMBIAR_ROL_PEDIDO: {
-            Serial.print("Ingresa el bit de rol: ");
+            Serial.print("Ingresa el bit de rol pedido: ");
             if(Serial.available() > 0) {
                 ROL_PEDIDO = Serial.parseInt();
 
@@ -112,7 +111,7 @@ bool configurarVariables(void) {
 
             // Al finalizar la modificacion de la configuracion, esta se
             // guarda en la EEPROM.
-            guardarConfiguracion();
+            EEPROM_MEM::guardarConfiguracion();
 
             Serial.println("Configuracion guardada");
 
@@ -129,8 +128,6 @@ bool configurarVariables(void) {
            break;
         }
     }
-
-    delay(1000);
 
     return true;
 }

@@ -1,12 +1,18 @@
 /*
 * Controlador de eventos.
 **/
-
-
-bool esperaConfirmacionSockets(void) {
+bool CONTROLADOR_SOCKETS::esperaConfirmacionSockets(void) {
     /*
     * Esperamos a la confirmacion de la conexion al socket server.
     */
 
-    return true;
+    if(ESTATUS_DISPOSITIVO == ESTATUS::CONECTADO) {
+        // Si se reintento la conexion, se pasa al estado
+        // de inicializacion de perifericos.
+        ESTADO = ESTADOS::INICIALIZAR_PERIFERICOS;
+
+        return true;
+    }
+
+    return false;
 };

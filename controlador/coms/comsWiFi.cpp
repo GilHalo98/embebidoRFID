@@ -2,7 +2,7 @@
 * Rutinas de comunicacion por medio de WiFi.
 **/
 
-bool inicializaWiFi(void) {
+bool COMS_WIFI::inicializarWiFi(void) {
     /*
     * Rutina que conecta el cliente a la red wifi.
     * retorna FALSE si la coneccion no se pudo establecer
@@ -38,8 +38,8 @@ bool inicializaWiFi(void) {
 
         // Si la cantidad de intentos maximos se excedio.
         if(intentosRealizados >= INTENTOS_MAXIMOS) {
-            // Encendemos el led del node y apagamos el del esp indicando
-            // que la conexion no se pudo realizar.
+            // Encendemos el led del node y apagamos el del
+            // esp indicando que la conexion no se pudo realizar.
             digitalWrite(ESP_LED, HIGH);
             Serial.println("\n");
 

@@ -2,7 +2,7 @@
  * Controlador del EEPROM para guardar y cargar información permanente.
  * */
 
-bool inicializarEEPROM(void) {
+bool EEPROM_MEM::inicializarEEPROM(void) {
     // Inicializamos la memoria EEPROM.
     EEPROM.begin(DIMENCION_EEPROM);
 
@@ -11,7 +11,7 @@ bool inicializarEEPROM(void) {
     return true;
 };
 
-bool guardarConfiguracion(void) {
+bool EEPROM_MEM::guardarConfiguracion(void) {
     // Instanciamos una estructura con la configuracion.
     CONFIGURACION_DISPOSITIVO configuracion;
 
@@ -45,11 +45,11 @@ bool guardarConfiguracion(void) {
         configuracion.versionApi, VERSION_API.length() + 1
     );
 
+    // Guardamos la accion opcional del dispositivo.
+    configuracion.rolPedido = ROL_PEDIDO;
+
     // Guardamos el puerto del servidor api en la configuración.
     configuracion.portApi = PORT_API;
-
-    // Guardamos el rol pedido en la configuracion.
-    configuracion.rolPedido = ROL_PEDIDO;
 
     // Ponemos la estructua en la memoria EEPROM, que en este
     // caso especifico es simulada por la memoria FLASH.
@@ -61,14 +61,14 @@ bool guardarConfiguracion(void) {
     return true;
 };
 
-bool cargarConfiguracion(void) {
+bool EEPROM_MEM::cargarConfiguracion(void) {
     // Instanciamos una estructura con la configuracion.
     CONFIGURACION_DISPOSITIVO configuracion;
 
     // Cargamos la configuración de la memoria EEPROM.
     EEPROM.get(0, configuracion);
 
-    // Cargamos el bit del rol de la configuración.
+    // Cargamos el bit del permiso de la configuración.
     ROL_PEDIDO = configuracion.rolPedido;
 
     // Cargamos el bit del permiso de la configuración.

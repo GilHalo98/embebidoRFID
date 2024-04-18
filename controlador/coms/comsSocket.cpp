@@ -2,7 +2,7 @@
  * Rutinas para la comunicacion por medio de sockets.
  * */
 
-void handlerEventosSocket(
+void COMS_SOCKETS::handlerEventosSocket(
     socketIOmessageType_t type,
     uint8_t* payload,
     size_t length
@@ -38,10 +38,6 @@ void handlerEventosSocket(
             // Apagamos el led del node.
             digitalWrite(NODE_LED, HIGH);
 
-            // Si se reintento la conexion, se pasa al estado
-            // de inicializacion de perifericos.
-            ESTADO = ESTADOS::INICIALIZAR_PERIFERICOS;
-
             break;
 
         case sIOtype_EVENT:
@@ -51,7 +47,7 @@ void handlerEventosSocket(
             EVENTO_RECIVIDO = (char *) payload;
 
             // Procesa los eventos personalizados recividos por sockets.
-            procesarEventosPersonalizados();
+            COMS_SOCKETS::procesarEventosPersonalizados();
 
             break;
 
@@ -77,14 +73,14 @@ void handlerEventosSocket(
     }
 };
 
-bool inicializarSockets(void) {
+bool COMS_SOCKETS::inicializarSockets(void) {
     Socket.setAuthorization(ACCESS_TOKEN);
     Socket.begin(IP_API, PORT_API, "/socket.io/?EIO=4");
-    Socket.onEvent(handlerEventosSocket);
+    Socket.onEvent(COMS_SOCKETS::handlerEventosSocket);
     return true;
 };
 
-bool reportarEstatusDispositivo(void) {
+bool COMS_SOCKETS::reportarEstatusDispositivo(void) {
     // creat JSON message for Socket.IO (event)
     DynamicJsonDocument buffer(1024);
     JsonArray array = buffer.to<JsonArray>();
@@ -109,7 +105,7 @@ bool reportarEstatusDispositivo(void) {
     return true;
 };
 
-bool procesarEventosPersonalizados(void) {
+bool COMS_SOCKETS::procesarEventosPersonalizados(void) {
     /*
     * Procesamos los eventos personalizados que lleguen por sockets.
     */
@@ -118,7 +114,10 @@ bool procesarEventosPersonalizados(void) {
     JsonDocument buffer;
 
     // Deserealizamos el evento recivido.
-    DeserializationError error = deserializeJson(buffer, EVENTO_RECIVIDO);
+    DeserializationError error = deserializeJson(
+        buffer,
+        EVENTO_RECIVIDO
+    );
 
     // Si no existe error en la deserealizacion.
     if(!error) {
@@ -138,17 +137,6 @@ bool procesarEventosPersonalizados(void) {
             // Hacemos toggle a la variable que indica al dispostivo
             // identificarse.
             IDENTIFICARSE = !IDENTIFICARSE;
-        }
-
-        else if(evento == "activar") {
-            ESTATUS_DISPOSITIVO = ESTATUS::OCUPADO;
-            digitalWrite(RELE_1, HIGH);
-
-        }
-
-        else if(evento == "desactivar") {
-            ESTATUS_DISPOSITIVO = ESTATUS::LIBRE;
-            digitalWrite(RELE_1, LOW);
         }
     }
 

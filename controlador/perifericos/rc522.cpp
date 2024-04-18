@@ -2,7 +2,7 @@
 * Rutinas para el RC522.
 **/
 
-bool inicializarRFID(void) {
+bool RFID::inicializarRFID(void) {
     /*
     * Inicializamos el RC522.
     */
@@ -32,7 +32,7 @@ bool inicializarRFID(void) {
     return true;
 };
 
-bool limpiarBufferRFID(void) {
+bool RFID::limpiarBufferRFID(void) {
     /*
     * Limpiamos el buffer del RC522
     * y reseteamos la bandera de acceso.
@@ -40,12 +40,14 @@ bool limpiarBufferRFID(void) {
 
     mfrc522.PICC_HaltA();
     mfrc522.PCD_StopCrypto1();
+    CREDENCIALES_VALIDAS = false;
     ID_EMPLEADO = "";
+    ROL_EMPLEADO = 0;
 
     return true;
 };
 
-bool lecturaRFID(void) {
+bool RFID::lecturaRFID(void) {
     /*
     * Realizamos la lectura de los datos del empleado en la tarjeta.
     **/
@@ -54,7 +56,27 @@ bool lecturaRFID(void) {
     byte size = sizeof(bufferID);
 
     // Realizamos la lectua del bloque.
-    STATUS_RC522 = mfrc522.MIFARE_Read(BLOCK_ID, bufferID, &size);
+    STATUS_RC522 = mfrc522.MIFARE_Read(
+        BLOCK_ID,
+        bufferID,
+        &size
+    );
+
+    // Si la lectura no fue existosa.
+    if(STATUS_RC522 != MFRC522::STATUS_OK) {
+        // mandamos el ESTADO a error de lectura.
+        return false;
+    }
+
+    // Calculamos el tamaño del buffer de los permisos.
+    size = sizeof(bufferROL);
+
+    // Realizamos la lectua del bloque.
+    STATUS_RC522 = mfrc522.MIFARE_Read(
+        BLOCK_ROL,
+        bufferROL,
+        &size
+    );
 
     // Si la lectura no fue existosa.
     if(STATUS_RC522 != MFRC522::STATUS_OK) {
@@ -65,10 +87,13 @@ bool lecturaRFID(void) {
     // Guardamos el id del empleado extraido.
     ID_EMPLEADO = String(bufferID[0], DEC);
 
+    // Guardamos el permiso del empelado extraido.
+    ROL_EMPLEADO = bufferROL[0];
+
     return true;
 };
 
-bool hayTarjetaPresente(void) {
+bool RFID::hayTarjetaPresente(void) {
     /*
     * Verificamos que haya una tarjeta presente en el RC522.
     **/
@@ -84,7 +109,7 @@ bool hayTarjetaPresente(void) {
     return true;
 };
 
-bool autentificarTarjetaLectura(int numeroBlock) {
+bool RFID::autentificarTarjetaLectura(int numeroBlock) {
     /*
     * Autentificamos la tarjeta para la lectura.
     **/
@@ -101,6 +126,30 @@ bool autentificarTarjetaLectura(int numeroBlock) {
     if(STATUS_RC522 == MFRC522::STATUS_OK) {
         return true;
 
+    }
+
+    return false;
+};
+
+bool RFID::lecturaContinua(void) {
+    /*
+    * Verificamos que la tarjeta ingresada no sea removida del lector.
+    * Esta tarea es imposible para el mfrc522, debido a que es
+    * por induccion, pero podemos autenticar la tarjeta, si la tarjeta
+    * es removida la autentificacion fallara y retornara falso.
+    **/
+
+    // Autenticamos la llave con la tarjeta.
+    STATUS_RC522 = mfrc522.PCD_Authenticate(
+        MFRC522::PICC_CMD_MF_AUTH_KEY_A,
+        BLOCK_ID,
+        &keyA,
+        &(mfrc522.uid)
+    );
+
+    // Si se autentica exitosamente.
+    if(STATUS_RC522 == MFRC522::STATUS_OK) {
+        return true;
     }
 
     return false;

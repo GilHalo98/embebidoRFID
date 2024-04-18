@@ -1,15 +1,12 @@
 #pragma ONCE
 
 // Pines de salida usados.
-#define ESP_LED 2 // Color AZUL
-#define NODE_LED 16   // Color ROJO
+#define ESP_LED 2 // D4 Color AZUL
+#define NODE_LED 16   // D0 Color ROJO
 #define LED_IDENTIFICACION 2
 
 // Pines del GPIO a usar.
-#define RELE_1 5
-#define RELE_2 4
-#define RELE_3 14
-#define RELE_4 12
+#define RELE_1 5  // D1
 
 // Pines del RC522.
 #define RST_PIN 0  // D3
@@ -56,6 +53,9 @@ enum ESTADOS {
     * Estados posibles del lector RFID.
     */
 
+    // Estado de halt.
+    HALT,
+
     // Estado inicial del esp8266.
     INICIALIZACION,
 
@@ -67,6 +67,9 @@ enum ESTADOS {
 
     // Estado de conexion con la red.
     CONEXION_RED,
+
+    // Realiza una prueba con el servidor API.
+    PROBAR_CONEXION_API,
 
     // Estado de inicializacion de conexion
     // con servidor sockets.
@@ -105,8 +108,24 @@ enum ESTADOS {
     // Estado de reporte de datos no se encuentran en registro.
     REPORTE_DATOS_NO_COINCIDEN_CON_REGISTRO,
 
-    // Estado de registro de reporte de chequeo de empleado.
-    REPORTE_CHEQUEO,
+    // Estado de validar credenciales de empleado
+    // para inicio de actividad.
+    VALIDAR_INICIO_ACTIVIDAD,
+
+    // Estado registro de reporte de actividad iniciada.
+    REPORTE_ACTIVIDAD_INICIADA,
+
+    // Estado de inicio de actividad.
+    INICIO_ACTIVIDAD,
+
+    // Estado de ejecutando actividad.
+    EN_ACTIVIDAD,
+
+    // Estado de actividad terminada.
+    TERMINAR_ACTIVIDAD,
+
+    // Estado de registro de reporte de actividad finalizada.
+    REPORTE_ACTIVIDAD_FINALIZADA,
 };
 
 enum EVENTOS {
@@ -142,7 +161,10 @@ enum EVENTOS {
     CAMBIAR_ACCESS_TOKEN,
 
     // Evento de finalizacion de configuracion
-    FINALIZAR_CONFIGURACION
+    FINALIZAR_CONFIGURACION,
+
+    // Evento para mostrar la informacion debug por serial.
+    MOSTRAR_DEBUG
 };
 
 enum FLAGS {
@@ -176,12 +198,22 @@ enum ESTATUS {
     // Status de dispositivo no inicializado.
     DESCONECTADO = 0b00000000,
 
+    // Estatus de conexion con el servidor sockets.
     CONECTADO = 0b00000001,
+
+    // Estatus de libre para realizar operacion.
     LIBRE = 0b00000010,
-    PERIFERICOS_NO_INICIALIZADOS = 0b00000100,
+
+    // Estatus de error con dispositivo.
+    ERROR = 0b00000100,
+
+    // Estatus de dispositivo ocupado.
     OCUPADO = 0b00001000,
+
+    // Estatus de dispositivo bloqueado.
     BLOQUEADO = 0b00010000,
 
+    // Banderas libres.
     LIBRE_3 = 0b00100000,
     LIBRE_4 = 0b01000000,
     LIBRE_5 = 0b10000000,
@@ -218,9 +250,11 @@ String EVENTO_RECIVIDO;
 
 // Buffer para el sensor RFID.
 byte bufferID[18];
+byte bufferROL[18];
 
 // Datos que se encuentran en la tarjeta.
 String ID_EMPLEADO;
+byte ROL_EMPLEADO;
 
 // Definimos la dimencion del vector de direcciones a usar en la EEPROM
 const int DIMENCION_EEPROM = 2048;
@@ -261,3 +295,7 @@ bool IDENTIFICARSE = false;
 
 // Frecuencia del parpadeo del led del node.
 int FRECUENCIA_PARPADEO = 250;
+
+// Indica si las credenciales son validas
+// para iniciar la actividad o no.
+bool CREDENCIALES_VALIDAS = false;

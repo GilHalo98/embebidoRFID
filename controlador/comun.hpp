@@ -161,10 +161,7 @@ enum EVENTOS {
     CAMBIAR_ACCESS_TOKEN,
 
     // Evento de finalizacion de configuracion
-    FINALIZAR_CONFIGURACION,
-
-    // Evento para mostrar la informacion debug por serial.
-    MOSTRAR_DEBUG
+    FINALIZAR_CONFIGURACION
 };
 
 enum FLAGS {

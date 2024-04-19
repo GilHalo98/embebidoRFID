@@ -24,7 +24,8 @@ bool CONTROLADOR_RFID::esperaTarjeta(void) {
 
     // Verificamos que haya una tarjeta presente en el RC522.
     if(RFID::hayTarjetaPresente()) {
-        // Si se detecto una tarjeta, se manda al ESTADO de lectura de datos.
+        // Si se detecto una tarjeta, se manda al ESTADO de
+        // lectura de datos.
         ESTADO = ESTADOS::AUTENTIFICACION_TARJETA;
     }
 
@@ -36,9 +37,9 @@ bool CONTROLADOR_RFID::autentificarTarjeta(void) {
      * Autentifica las llaves de la tarjeta ingresada.
      * */
 
-    // Autentificamos los bloques de los datos del empleado en la tarjeta.
-    // Si los datos fueron autentificados exitosamente
-    // se pasa al ESTADO de lectura de tarjeta.
+    // Autentificamos los bloques de los datos del empleado en
+    // la tarjeta. Si los datos fueron autentificados exitosamente se
+    // pasa al ESTADO de lectura de tarjeta.
     if(!RFID::autentificarTarjetaEscritura(4)) {
         ESTADO = ESTADOS::ERROR_AUTENTIFICACION;
         return false;
@@ -81,7 +82,8 @@ bool CONTROLADOR_RFID::guardarDatosTarjeta(void) {
         LCD::mostrarTexto("ERR", 17, 1);
     }
 
-    // Guardamos en el bloque 2, que representa los permisos del empleado.
+    // Guardamos en el bloque 2, que representa los permisos
+    // del empleado.
     escrituraOK = RFID::escrituraRFID(
         BLOCK_PERMISOS,
         PERMISO_EMPLEADO

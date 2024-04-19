@@ -192,6 +192,7 @@ enum ESTATUS {
     LIBRE_4 = 0b01000000,
     LIBRE_5 = 0b10000000,
 };
+
 enum ACCIONES_OPCIONALES {
     /*
     * Acciones opcionales del dispositivo.

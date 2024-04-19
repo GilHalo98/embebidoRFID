@@ -14,7 +14,8 @@ namespace CONTROLADOR_EVENTOS {
     // Espera por un evento por medio del bus Serial.
     bool esperarEvento(void);
 
-    // Indica la finalización de la escritura de la tarjeta de manera exitosa.
+    // Indica la finalización de la escritura de la tarjeta
+    // de manera exitosa.
     bool escrituraFinalizada(void);
 };
 

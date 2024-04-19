@@ -5,60 +5,67 @@
 
 void setup(void) {
     // Establecemos el estado a inicializacion.
-    estado = ESTADOS::INICIALIZACION;
+    ESTADO = ESTADOS::INICIALIZACION;
 
     // Inicializamos los buses de comunicacion.
-    inicializarComs();
+    CONTROLADOR_INICIALIZAR::inicializar();
 };
 
 
 void loop(void) {
-    if(estado != estadoAnterior) {
+    // Muestra el estado actual del dispositivo.
+    if(ESTADO != ESTADO_ANTERIOR) {
         Serial.print("Estado actual: ");
-        Serial.println(estado);
+        Serial.println(ESTADO);
 
-        estadoAnterior = estado;
+        // Actualizamos el estado anterior.
+        ESTADO_ANTERIOR = ESTADO;
     }
 
-    switch(estado) {
-        case ESTADOS::INICIALIZAR_PERIFERICOS: {
-            inicializarPerifericos();
-            break;
+    // Cada que transcurra 100ms se actualizara el estado
+    // del dispositivo.
+    if(millis() % FRECUENCIA_ACTUALIZACION_MAIN == 0) {
+        switch(ESTADO) {
+            case ESTADOS::INICIALIZAR_PERIFERICOS: {
+                CONTROLADOR_INICIALIZAR::inicializarPerifericos();
+                break;
 
-        } case ESTADOS::ERROR_PERIFERICOS: {
-            errorPerifericos();
-            break;
+            } case ESTADOS::ERROR_PERIFERICOS: {
+                CONTROLADOR_ERROR::errorPerifericos();
+                break;
 
-        } case ESTADOS::ESPERA_EVENTO: {
-            esperarEvento();
-            break;
+            } case ESTADOS::ESPERA_EVENTO: {
+                CONTROLADOR_EVENTOS::esperarEvento();
+                break;
 
-        } case ESTADOS::ESPERA_TARJETA: {
-            esperaTarjeta();
-            break;
+            } case ESTADOS::ESPERA_TARJETA: {
+                CONTROLADOR_RFID::esperaTarjeta();
+                break;
 
-        } case ESTADOS::AUTENTIFICACION_TARJETA: {
-            autentificarTarjeta();
-            break;
+            } case ESTADOS::AUTENTIFICACION_TARJETA: {
+                CONTROLADOR_RFID::autentificarTarjeta();
+                break;
 
-        } case ESTADOS::ERROR_AUTENTIFICACION: {
-            errorAutentificacion();
-            break;
+            } case ESTADOS::ERROR_AUTENTIFICACION: {
+                CONTROLADOR_ERROR::errorAutentificacion();
+                break;
 
-        } case ESTADOS::GUARDAR_DATOS_TARJETA: {
-            guardarDatosTarjeta();
-            break;
+            } case ESTADOS::GUARDAR_DATOS_TARJETA: {
+                CONTROLADOR_RFID::guardarDatosTarjeta();
+                break;
 
-        } case ESTADOS::ERROR_ESCRITURA: {
-            errorEscritura();
-            break;
+            } case ESTADOS::ERROR_ESCRITURA: {
+                CONTROLADOR_ERROR::errorEscritura();
+                break;
 
-        } case ESTADOS::ESCRITURA_FINALIZADA: {
-            escrituraFinalizada();
-            break;
+            } case ESTADOS::ESCRITURA_FINALIZADA: {
+                CONTROLADOR_EVENTOS::escrituraFinalizada();
+                break;
 
-        } default: {
-            break;
+            } default: {
+                CONTROLADOR_ERROR::halt();
+                break;
+            }
         }
     }
 };

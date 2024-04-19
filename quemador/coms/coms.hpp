@@ -2,20 +2,27 @@
 * Funciones para los protocolos de comunicacion.
 * */
 
-// Inicia comunicacion Serial.
-bool inicializarSerial(void);
+namespace COMS_SERIAL {
+    /* Namespace de comunicacion serial. */
 
-// Checa si se recivio algun evento por medio del bus Serial.
-int checarPorEvento(void);
+    // Inicia comunicacion Serial.
+    bool inicializarSerial(void);
 
-// recivimos un dato del serial.
-int recivirDato(void);
+    // Checa si se recivio algun evento por medio del bus Serial.
+    int checarPorEvento(void);
 
-// Vaciamos el buffer serial.
-void vaciarBuffer(void);
+    // recivimos un dato del serial.
+    int recivirDato(void);
 
-// Inicializa la comunicacion por SPI.
-bool inicializarSPI(void);
+    // Vaciamos el buffer serial.
+    void vaciarBuffer(void);
+};
+
+namespace COMS_SPI {
+    // Inicializa la comunicacion por SPI.
+    bool inicializarSPI(void);
+};
+
 
 // Importamos las funciones.
 #include "./comsSerial.cpp"

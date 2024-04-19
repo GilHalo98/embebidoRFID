@@ -2,7 +2,7 @@
 * Rutinas para el LCD.
 **/
 
-bool inicializarLCD(void) {
+bool LCD::inicializarLCD(void) {
     /*
     * Rutina de inicializacion del display LCD.
     */
@@ -18,12 +18,12 @@ bool inicializarLCD(void) {
 
     // Mostramos el mensaje de inicializando dispositivo.
     DISPLAY_LCD.setCursor(0, 0);
-    DISPLAY_LCD.print("INICIALIZANDO");
+    DISPLAY_LCD.print("INICIALIZANDO...");
 
     return true;
 };
 
-bool mostrarTexto(const char texto[], int x, int y, bool limpiar) {
+bool LCD::mostrarTexto(const char texto[], int x, int y, bool limpiar) {
     /*
     * Mostramos un texto en el lcd.
     */

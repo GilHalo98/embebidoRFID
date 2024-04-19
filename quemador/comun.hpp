@@ -3,13 +3,15 @@
 // Pines del RC522.
 #define RST_PIN 9
 #define SS_PIN 10
-#define LED_IDENTIFICACION 2
 
 #include <SPI.h>
 #include <MFRC522.h>
 #include <LiquidCrystal_I2C.h>
 
 enum ESTADOS {
+    // Estado de halt.
+    HALT,
+
     // Estado inicial del arduino.
     INICIALIZACION,
 
@@ -21,9 +23,6 @@ enum ESTADOS {
 
     // Estado de espera por evento en serial.
     ESPERA_EVENTO,
-
-    // Estado de pureba de dispositivo.
-    PRUEBA_DISPOSITIVO,
 
     // Estado de espera de ingreso de tarjeta.
     ESPERA_TARJETA,
@@ -46,7 +45,7 @@ enum ESTADOS {
 
 enum EVENTOS {
     /*
-    * Eventos que se pasan por medio de I2C.
+    * Eventos que se pasan por medio de Serial.
     * */
 
     // Inicia el grabado de datos.
@@ -108,15 +107,16 @@ int BLOCK_PERMISOS = 5;
 int BLOCK_ROL = 6;
 
 // Instanciamos un status para el RFID.
-MFRC522::StatusCode statusRC522;
+MFRC522::StatusCode STATUS_RC522;
 
 // Establece el estado actual del esp8266.
-ESTADOS estado;
-ESTADOS estadoAnterior;
+ESTADOS ESTADO;
+ESTADOS ESTADO_ANTERIOR;
 
 // Buffer para el sensor RFID.
 byte bufferRFIDEscritura[16];
 
+// Datos a guardar en la tarjeta.
 int ID_EMPLEADO;
 int PERMISO_EMPLEADO;
 int ROL_EMPLEADO;
@@ -124,6 +124,8 @@ int ROL_EMPLEADO;
 // Baud rate de comunicacion serial.
 unsigned long BAUD_RATE = 9600;
 
-
 // Bandera que indica si esta esperando tarjeta.
-bool toggleIndicador = false;
+bool TOGGLE_INDICADOR = false;
+
+// Frecuencia de actualizacion del manager de estados.
+int FRECUENCIA_ACTUALIZACION_MAIN = 100;

@@ -2,24 +2,24 @@
 * Inicializa el NODEMCU.
 **/
 
-bool inicializarComs(void) {
+bool CONTROLADOR_INICIALIZAR::inicializar(void) {
     /*
     * Inicializa los buses de comunicacion.
     */
 
     // Inicializamos el bus Serial.
-    inicializarSerial();
+    COMS_SERIAL::inicializarSerial();
 
     // Inicializamos el bus SPI.
-    inicializarSPI();
+    COMS_SPI::inicializarSPI();
 
     // Cambiamos al estado de inicializacion de perifericos.
-    estado = ESTADOS::INICIALIZAR_PERIFERICOS;
+    ESTADO = ESTADOS::INICIALIZAR_PERIFERICOS;
 
     return true;
 };
 
-bool inicializarPerifericos(void) {
+bool CONTROLADOR_INICIALIZAR::inicializarPerifericos(void) {
     /*
     * Inicializa los perifericos del embebido.
     */
@@ -28,31 +28,46 @@ bool inicializarPerifericos(void) {
     bool initOK = false;
 
     // Inicializamos el lcd.
-    initOK = inicializarLCD();
+    initOK = LCD::inicializarLCD();
 
-    // Inicializamos el RC522.
-    initOK = inicializarRFID();
-
-    mostrarTexto("LECTOR:", 0, 1);
+    // Mostramos el proceso de inicializacion.
+    LCD::mostrarTexto("LECTOR:", 0, 1);
 
     // Verificamos que la inicializacion de los perifericos fue
     // exitosa.
     if(initOK) {
-        mostrarTexto("OK", 8, 1);
-        delay(500);
+        LCD::mostrarTexto("OK", 8, 1);
+    } else {
+        LCD::mostrarTexto("ERROR", 8, 1);
+    }
 
-        // Cambiamos al estado de espera de tarjeta.
-        estado = ESTADOS::ESPERA_EVENTO;
+    // Inicializamos el RC522.
+    initOK = RFID::inicializarRFID();
 
+    // Mostramos el proceso de inicializacion.
+    LCD::mostrarTexto("RFID:", 0, 2);
+
+    // Verificamos que la inicializacion de los perifericos fue
+    // exitosa.
+    if(initOK) {
+        LCD::mostrarTexto("OK", 6, 2);
+    } else {
+        LCD::mostrarTexto("ERROR", 6, 2);
+    }
+
+    // Esperamos un momento.
+    delay(500);
+
+    if(initOK) {
         // Mostramos en el lcd esperando a guardar configuracion.
-        mostrarTexto(
+        LCD::mostrarTexto(
             "Esperando a recivir",
             0,
             0,
             true
         );
 
-        mostrarTexto(
+        LCD::mostrarTexto(
             "configuracion...",
             0,
             1
@@ -63,17 +78,17 @@ bool inicializarPerifericos(void) {
         Serial.println("\r\n");
         Serial.println(FLAGS::INICIALIZACION_TERMINADA);
 
+        // Cambiamos al estado de espera de evento serial.
+        ESTADO = ESTADOS::ESPERA_EVENTO;
+
     } else {
-        mostrarTexto("ERROR", 8, 1);
-        delay(500);
-
-        // Cambiamos al estado de generacion de reporte de perifericos.
-        estado = ESTADOS::ERROR_PERIFERICOS;
-
         // Respondemos por serial con el bit
         // de error con dispositivo.
         Serial.println("\r\n");
         Serial.println(FLAGS::ERROR_CON_DISPOSITIVO);
+
+        // Cambiamos al estado de generacion de reporte de perifericos.
+        ESTADO = ESTADOS::ERROR_PERIFERICOS;
     }
 
     return true;

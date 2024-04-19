@@ -2,7 +2,7 @@
 * Rutinas para el RC522.
 **/
 
-bool inicializarRFID(void) {
+bool RFID::inicializarRFID(void) {
     /*
     * Inicializamos el RC522.
     */
@@ -31,7 +31,7 @@ bool inicializarRFID(void) {
     return true;
 };
 
-bool limpiarBufferRFID(void) {
+bool RFID::limpiarBufferRFID(void) {
     /*
     * Limpiamos el buffer del RC522
     * y reseteamos la bandera de acceso.
@@ -43,7 +43,7 @@ bool limpiarBufferRFID(void) {
     return true;
 };
 
-bool escrituraRFID(int bloque, int dato) {
+bool RFID::escrituraRFID(int bloque, int dato) {
     /*
     * Realizamos la lectura de los datos del empleado en la tarjeta.
     **/
@@ -60,21 +60,21 @@ bool escrituraRFID(int bloque, int dato) {
     byte size = sizeof(bufferRFIDEscritura);
 
     // Escribimos el dato en el bloque dado.
-    statusRC522 = mfrc522.MIFARE_Write(
+    STATUS_RC522 = mfrc522.MIFARE_Write(
         bloque,
         bufferRFIDEscritura,
         size
     );
 
     // Verificamos que la escritura fue exitosa.
-    if(statusRC522 != MFRC522::STATUS_OK) {
+    if(STATUS_RC522 != MFRC522::STATUS_OK) {
         return false;
     }
 
     return true;
 };
 
-bool hayTarjetaPresente(void) {
+bool RFID::hayTarjetaPresente(void) {
     /*
     * Verificamos que haya una tarjeta presente en el RC522.
     **/
@@ -92,13 +92,13 @@ bool hayTarjetaPresente(void) {
     return true;
 };
 
-bool autentificarTarjetaEscritura(int numeroBlock) {
+bool RFID::autentificarTarjetaEscritura(int numeroBlock) {
     /*
     * Autentificamos la tarjeta para la lectura.
     **/
 
     // Autenticamos la llave con la tarjeta.
-    statusRC522 = mfrc522.PCD_Authenticate(
+    STATUS_RC522 = mfrc522.PCD_Authenticate(
         MFRC522::PICC_CMD_MF_AUTH_KEY_A,
         numeroBlock,
         &keyA,
@@ -106,7 +106,7 @@ bool autentificarTarjetaEscritura(int numeroBlock) {
     );
 
     // Si se autentica exitosamente.
-    if(statusRC522 == MFRC522::STATUS_OK) {
+    if(STATUS_RC522 == MFRC522::STATUS_OK) {
         return true;
     }
 

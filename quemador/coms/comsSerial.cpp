@@ -2,7 +2,7 @@
 * Rutinas para la comunicacion Serial.
 * */
 
-bool inicializarSerial(void) {
+bool COMS_SERIAL::inicializarSerial(void) {
     /*
     * Inicializa la comunicacion serial.
     * */
@@ -10,12 +10,10 @@ bool inicializarSerial(void) {
     // Inicializa la comunicacion con el baud rate dado.
     Serial.begin(BAUD_RATE);
 
-    // Serial.println("\nSerial inicializado");
-
     return true;
 };
 
-int checarPorEvento(void) {
+int COMS_SERIAL::checarPorEvento(void) {
     /*
      * Checa si se ha recivido algun evento sobre el bus Serial.
      * */
@@ -27,7 +25,7 @@ int checarPorEvento(void) {
     return -1;
 };
 
-int recivirDato(void) {
+int COMS_SERIAL::recivirDato(void) {
     /*
     * Recive un dato por serial.
     */
@@ -35,10 +33,10 @@ int recivirDato(void) {
         return Serial.parseInt();
     }
 
-    return NULL;
+    return -1;
 }
 
-void vaciarBuffer(void) {
+void COMS_SERIAL::vaciarBuffer(void) {
     // Vaciamos el buffer serial.
     while(Serial.available() > 0) {
         Serial.parseInt();

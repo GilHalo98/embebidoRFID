@@ -173,7 +173,9 @@ bool CONTROLADOR_API::reporteInicioActividad(void) {
 
     } else {
         // Si no es asi, entonces cambiamos al
-        // estado de espera de tarjeta.    // 
+        // estado de espera de tarjeta.
+        ESTADO = ESTADOS::ESPERA_TARJETA;
+    }
 
     return true;
 };

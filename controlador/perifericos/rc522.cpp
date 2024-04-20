@@ -18,6 +18,7 @@ bool RFID::inicializarRFID(void) {
     // Si la version es invalida, retorna false.
     if((version == 0x00) || (version == 0xFF)) {
         return false;
+
     } else {
         // Mostramos la version del firmware.
         mfrc522.PCD_DumpVersionToSerial();

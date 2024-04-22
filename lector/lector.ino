@@ -20,14 +20,9 @@ void setup(void) {
     digitalWrite(NODE_LED, HIGH);
     digitalWrite(ESP_LED, HIGH);
 
-    // Inicializamos la memoria EEPROM.
-    inicializarEEPROM();
-
-    // Inicializamos los buses de comunicacion.
-    inicializarComs();
-
-    // Esperamos por incio de configuracion en tiempo de boot.
-    checarPorConfiguracionBOOT();
+    // Inicializamos los buses de comunicacion y la
+    // memoria EEPROM y checamos por configuracion de variables.
+    CONTROLADOR_INICIALIZAR::inicializar();
 };
 
 void loop(void) {
@@ -48,7 +43,7 @@ void loop(void) {
         Serial.println(ESTATUS_DISPOSITIVO);
 
         // Mandamos el status del dispositivo.
-        reportarEstatusDispositivo();
+        COMS_SOCKETS::reportarEstatusDispositivo();
 
         // El estatus anterior lo tomamos del estatus actual.
         ESTATUS_DISPOSITIVO_ANTERIOR = ESTATUS_DISPOSITIVO;
@@ -71,78 +66,83 @@ void loop(void) {
     if(millis() % FRECUENCIA_ACTUALIZACION_MAIN == 0) {
         switch(ESTADO) {
             case ESTADOS::CONFIGURAR_VARIABLES: {
-                configurarVariables();
+                CONTROLADOR_CONFIGURACION::configurarVariables();
                 break;
 
             } case ESTADOS::CARGAR_CONFIGURACION_EEPROM: {
-                cargarConfiguracionEEPROM();
+                CONTROLADOR_INICIALIZAR::cargarConfiguracionEEPROM();
                 break;
 
             } case ESTADOS::CONEXION_RED: {
-                conexionRed();
+                CONTROLADOR_INICIALIZAR::conexionRed();
+                break;
+
+            } case ESTADOS::PROBAR_CONEXION_API: {
+                CONTROLADOR_API::verificarEstadoApi();
                 break;
 
             } case ESTADOS::INICIALIZAR_CONEXION_SOCKETS: {
-                inicializarConexionSockets();
+                CONTROLADOR_INICIALIZAR::inicializarConexionSockets();
                 break;
 
             } case ESTADOS::ESPERA_CONEXION_SOCKETS: {
-                esperaConfirmacionSockets();
+                CONTROLADOR_SOCKETS::esperaConfirmacionSockets();
                 break;
 
             } case ESTADOS::INICIALIZAR_PERIFERICOS: {
-                inicializarPerifericos();
+                CONTROLADOR_INICIALIZAR::inicializarPerifericos();
                 break;
 
             } case ESTADOS::ERROR_CONEXION_API: {
-                errorAPI();
+                CONTROLADOR_ERROR::errorAPI();
                 break;
 
             } case ESTADOS::REGISTRO_REPORTE_FALLIDO: {
-                errorRegistroReporte();
+                CONTROLADOR_ERROR::errorRegistroReporte();
                 break;
 
             } case ESTADOS::ERROR_PERIFERICOS: {
-                errorInicializacionPerifericos();
+                CONTROLADOR_ERROR::errorInicializacionPerifericos();
                 break;
 
             } case ESTADOS::ESPERA_TARJETA: {
-                esperaTarjeta();
+                CONTROLADOR_RFID::esperaTarjeta();
                 break;
 
             } case ESTADOS::AUTENTIFICACION_TARJETA: {
-                autentificarTarjeta();
+                CONTROLADOR_RFID::autentificarTarjeta();
                 break;
 
             } case ESTADOS::REPORTE_ERROR_AUTENTIFICACION: {
-                reporteErrorAutentificacionTarjeta();
+                CONTROLADOR_API::reporteErrorAutentificacionTarjeta();
                 break;
 
             } case ESTADOS::LEER_DATOS_TARJETA: {
-                leerDatosTarjeta();
+                CONTROLADOR_RFID::leerDatosTarjeta();
                 break;
 
             } case ESTADOS::VERIFICAR_EMPLEADO: {
-                validarExistenciaEmpleado();
+                CONTROLADOR_API::validarExistenciaEmpleado();
                 break;
 
             } case ESTADOS::REPORTE_DATOS_NO_COINCIDEN_CON_REGISTRO: {
-                reporteEmpleadoInexistente();
+                CONTROLADOR_API::reporteEmpleadoInexistente();
                 break;
 
             } case ESTADOS::VALIDAR_ACCESO_EMPLEADO: {
-                validarAcceso();
+                CONTROLADOR_ACCESOS::validarAcceso();
                 break;
 
             } case ESTADOS::ENVIAR_EVENTO_ACCESO: {
-                enviarEventoAcceso();
+                CONTROLADOR_SOCKETS::enviarEventoAcceso();
                 break;
 
             } case ESTADOS::REPORTE_ACCESO: {
-                reporteAcceso();
+                CONTROLADOR_API::reporteAcceso();
                 break;
 
             } default: {
+                CONTROLADOR_ERROR::halt();
                 break;
             }
         }

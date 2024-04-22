@@ -2,7 +2,7 @@
  * Controlador del EEPROM para guardar y cargar información permanente.
  * */
 
-bool inicializarEEPROM(void) {
+bool EEPROM_MEM::inicializarEEPROM(void) {
     // Inicializamos la memoria EEPROM.
     EEPROM.begin(DIMENCION_EEPROM);
 
@@ -11,7 +11,7 @@ bool inicializarEEPROM(void) {
     return true;
 };
 
-bool guardarConfiguracion(void) {
+bool EEPROM_MEM::guardarConfiguracion(void) {
     // Instanciamos una estructura con la configuracion.
     CONFIGURACION_DISPOSITIVO configuracion;
 
@@ -61,10 +61,34 @@ bool guardarConfiguracion(void) {
     // Guardamos los cambios.
     EEPROM.commit();
 
+    Serial.print("[PERMISO]: ");
+    Serial.println(configuracion.permisoPedido);
+
+    Serial.print("[ACCION OPCIONAL]: ");
+    Serial.println(configuracion.accionOpcional);
+
+    Serial.print("[SSID]: ");
+    Serial.println(configuracion.ssid);
+
+    Serial.print("[PASS]: ");
+    Serial.println(configuracion.password);
+
+    Serial.print("[TOKEN]: ");
+    Serial.println(configuracion.accessToken);
+
+    Serial.print("[IP]: ");
+    Serial.println(configuracion.ipApi);
+
+    Serial.print("[VER]: ");
+    Serial.println(configuracion.versionApi);
+
+    Serial.print("[PUERTO]: ");
+    Serial.println(configuracion.portApi );
+
     return true;
 };
 
-bool cargarConfiguracion(void) {
+bool EEPROM_MEM::cargarConfiguracion(void) {
     // Instanciamos una estructura con la configuracion.
     CONFIGURACION_DISPOSITIVO configuracion;
 
@@ -94,6 +118,30 @@ bool cargarConfiguracion(void) {
 
     // Cargamos la accion opcional del dispositivo.
     ACCION_OPCIONAL = configuracion.accionOpcional;
+
+    Serial.print("[PERMISO]: ");
+    Serial.println(PERMISO_PEDIDO);
+
+    Serial.print("[ACCION OPCIONAL]: ");
+    Serial.println(ACCION_OPCIONAL);
+
+    Serial.print("[PUERTO]: ");
+    Serial.println(PORT_API);
+
+    Serial.print("[SSID]: ");
+    Serial.println(SSID);
+
+    Serial.print("[PASS]: ");
+    Serial.println(PASSWORD);
+
+    Serial.print("[TOKEN]: ");
+    Serial.println(ACCESS_TOKEN);
+
+    Serial.print("[IP]: ");
+    Serial.println(IP_API);
+
+    Serial.print("[VER]: ");
+    Serial.println(VERSION_API);
 
     return true;
 };

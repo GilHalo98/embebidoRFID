@@ -2,7 +2,7 @@
 * Controlador de eventos.
 **/
 
-bool enviarEventoAcceso(void) {
+bool CONTROLADOR_SOCKETS::enviarEventoAcceso(void) {
     /*
     * Envia un evento por medio de sockets.
     **/
@@ -13,15 +13,15 @@ bool enviarEventoAcceso(void) {
     // Se envia el evento de acceso por sockets.
     switch(ACCION_OPCIONAL) {
         case ACCIONES_OPCIONALES::NINGUNA: {
-            enviarPeticionAcceso();
+            COMS_SOCKETS::enviarPeticionAcceso();
             break;
 
         } case ACCIONES_OPCIONALES::BLOQUEAR_PUERTA_AL_CERRAR: {
-            enviarPeticionAccesoBloqueo();
+            COMS_SOCKETS::enviarPeticionAccesoBloqueo();
             break;
 
         } case ACCIONES_OPCIONALES::DESBLOQUEAR_PUERTA_AL_ABRIR: {
-            enviarPeticionAccesoDesbloqueo();
+            COMS_SOCKETS::enviarPeticionAccesoDesbloqueo();
             break;
 
         } default: {
@@ -36,7 +36,7 @@ bool enviarEventoAcceso(void) {
 };
 
 
-bool esperaConfirmacionSockets(void) {
+bool CONTROLADOR_SOCKETS::esperaConfirmacionSockets(void) {
     /*
     * Esperamos a la confirmacion de la conexion al socket server.
     */

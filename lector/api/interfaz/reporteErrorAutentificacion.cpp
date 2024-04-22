@@ -2,7 +2,7 @@
  * Interfaz de endpoint de registro de reporte de error de autentificacion de tarjeta.
  * */
 
-respuestaIoT registrarReporteErrorAutentificacionTarjeta(void) {
+respuestaIoT INTERFAZ::registrarReporteErrorAutentificacionTarjeta(void) {
     /*
     * Función de consulta de usuarios de la API.
     */
@@ -59,7 +59,8 @@ respuestaIoT registrarReporteErrorAutentificacionTarjeta(void) {
                 // Si el codigo es OK (200) entonces la peticion
                 // se realizo con exito.
 
-                // Recuperamos los datos de la consulta en formato String.
+                // Recuperamos los datos de la consulta
+                // en formato String.
                 String respuestaString = registroHTTP.getString();
 
                 // Instanciamos un buffer json.

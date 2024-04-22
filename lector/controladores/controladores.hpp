@@ -2,71 +2,112 @@
 * Rutinas de los controladores de los estados del esp8266
 */
 
-// Controlador de configuracion de variables.
-bool configurarVariables(void);
+namespace CONTROLADOR_CONFIGURACION {
+    /*
+    * Controladores de configuracion del dispositivo.
+    */
 
-// Controlador de inicializacion de buses de comunicacion.
-bool inicializarComs(void);
+    // Recive y almacena la configuracion recivida por serial.
+    bool configurarVariables(void);
+};
 
-// Controlador de inicializacion de perifericos.
-bool inicializarPerifericos(void);
+namespace CONTROLADOR_INICIALIZAR {
+    /*
+    * Controladores de inicializacion del dispositivo.
+    */
 
-// Controlador de inicializacion de sockets.
-bool inicializarConexionSockets(void);
+    // Inicializa la conexion con el server sockets.
+    bool inicializarConexionSockets(void);
 
-// Esperamos por la confirmacion de conexion al socket server.
-bool esperaConfirmacionSockets(void);
+    // Carga la configuracion del dispositivo almacenada en la EEPROM.
+    bool cargarConfiguracionEEPROM(void);
 
-// Controlador de carga de datos de la EEPROM.
-bool cargarConfiguracionEEPROM(void);
+    // Inicializa los perifericos del dispositivo.
+    bool inicializarPerifericos(void);
 
-// Controlador de iniciar conexion a red.
-bool conexionRed(void);
+    // Inicializa los buses de comunicacion del dispositivo.
+    bool inicializar(void);
 
-// Cotrolador de datos de tarjeta.
-bool leerDatosTarjeta(void);
+    // Inicializa el modulo wifi del dispositivo.
+    bool conexionRed(void);
+};
 
-// Controlador de autentificacion de tarjeta.
-bool autentificarTarjeta(void);
+namespace CONTROLADOR_RFID {
+    /*
+    * Controladores de lector RFID del dispositivo.
+    */
 
-// Controlador de espera de tarjeta.
-bool esperaTarjeta(void);
+    // Autentifica la tarjeta ingresada.
+    bool autentificarTarjeta(void);
 
-// Controlador de error con conexion a API.
-bool errorAPI(void);
+    // Lee los datos de la tarjeta y los carga en la memoria.
+    bool leerDatosTarjeta(void);
 
-// Error de registro de reporte a la DB.
-bool errorRegistroReporte(void);
+    // Espera por ingreso de tarjeta.
+    bool esperaTarjeta(void);
+};
 
-// Error de inicializacion de perifericos.
-bool errorInicializacionPerifericos(void);
+namespace CONTROLADOR_ERROR {
+    /*
+    * Controladores de lector ERROR del dispositivo.
+    */
 
-// Valida que el registro empleado exista en la DB.
-bool validarExistenciaEmpleado(void);
+    // Error con la inicializacion deperifericos del dispositivo.
+    bool errorInicializacionPerifericos(void);
 
-// Registra un reporte de acceso.
-bool reporteAcceso(void);
+    // Error con el registro de reportes.
+    bool errorRegistroReporte(void);
 
-// Registra un reporte de fallos con perifericos.
-bool reporteFalloPerifericos(void);
+    // Error de conexion con la api.
+    bool errorAPI(void);
 
-// Registra un reporte de autentificacion de tarjeta fallida
-bool reporteErrorAutentificacionTarjeta(void);
+    // HALT.
+    bool halt(void);
+};
 
-// Registra un reprte de registro de empleado no existe.
-bool reporteEmpleadoInexistente(void);
+namespace CONTROLADOR_API {
+    /*
+    * Controladores de la api.
+    */
 
-// Valida el acceso al empleado.
-bool validarAcceso(void);
+    // Verifica el estado de la conexion de la api.
+    bool verificarEstadoApi(void);
 
-// Envia el evento de acceso por sockets.
-bool enviarEventoAcceso(void);
+    // Valida que el registro empleado exista en la DB.
+    bool validarExistenciaEmpleado(void);
+
+    // Registra un reporte de acceso.
+    bool reporteAcceso(void);
+
+    // Registra un reporte de autentificacion de tarjeta fallida
+    bool reporteErrorAutentificacionTarjeta(void);
+
+    // Registra un reprte de registro de empleado no existe.
+    bool reporteEmpleadoInexistente(void);
+};
+
+namespace CONTROLADOR_SOCKETS {
+    /*
+    * Controladores de la api.
+    */
+
+    // Espera la confirmacion de la conexion al servidor sockets.
+    bool esperaConfirmacionSockets(void);
+
+    // Envia el evento de acceso por sockets.
+    bool enviarEventoAcceso(void);
+};
+
+namespace CONTROLADOR_ACCESOS {
+    // Valida el acceso al empleado.
+    bool validarAcceso(void);
+};
 
 // Importamos las funciones de los controladores
-#include "./controladorConfig.cpp"
 #include "./controladorInicializacion.cpp"
-#include "./controladorRFID.cpp"
-#include "./controladorError.cpp"
-#include "./controladorAPI.cpp"
-#include "./controladorAccesos.cpp"
 #include "./controladorEventos.cpp"
+#include "./controladorAccesos.cpp"
+#include "./controladorConfig.cpp"
+#include "./controladorError.cpp"
+#include "./controladorRFID.cpp"
+#include "./controladorAPI.cpp"

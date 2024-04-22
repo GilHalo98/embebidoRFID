@@ -2,7 +2,7 @@
 * Rutinas para el RC522.
 **/
 
-bool inicializarRFID(void) {
+bool RFID::inicializarRFID(void) {
     /*
     * Inicializamos el RC522.
     */
@@ -32,14 +32,17 @@ bool inicializarRFID(void) {
     return true;
 };
 
-bool limpiarBufferRFID(void) {
+bool RFID::limpiarBufferRFID(void) {
     /*
     * Limpiamos el buffer del RC522
     * y reseteamos la bandera de acceso.
     **/
 
+    // Limpiamos el buffer del rfid.
     mfrc522.PICC_HaltA();
     mfrc522.PCD_StopCrypto1();
+
+    // Reseteamos los datos del empelado.
     ACCESO_GARANTIZADO = false;
     ID_EMPLEADO = "";
     ACCESOS = 0;
@@ -47,7 +50,7 @@ bool limpiarBufferRFID(void) {
     return true;
 };
 
-bool lecturaRFID(void) {
+bool RFID::lecturaRFID(void) {
     /*
     * Realizamos la lectura de los datos del empleado en la tarjeta.
     **/
@@ -93,7 +96,7 @@ bool lecturaRFID(void) {
     return true;
 };
 
-bool hayTarjetaPresente(void) {
+bool RFID::hayTarjetaPresente(void) {
     /*
     * Verificamos que haya una tarjeta presente en el RC522.
     **/
@@ -109,7 +112,7 @@ bool hayTarjetaPresente(void) {
     return true;
 };
 
-bool autentificarTarjetaLectura(int numeroBlock) {
+bool RFID::autentificarTarjetaLectura(int numeroBlock) {
     /*
     * Autentificamos la tarjeta para la lectura.
     **/

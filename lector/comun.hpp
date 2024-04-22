@@ -52,6 +52,9 @@ enum ESTADOS {
     * Estados posibles del lector RFID.
     */
 
+    // Estado de halt.
+    HALT,
+
     // Estado inicial del esp8266.
     INICIALIZACION,
 
@@ -63,6 +66,9 @@ enum ESTADOS {
 
     // Estado de conexion con la red.
     CONEXION_RED,
+
+    // Realiza una prueba con el servidor API.
+    PROBAR_CONEXION_API,
 
     // Estado de inicializacion de conexion
     // con servidor sockets.
@@ -202,6 +208,7 @@ enum ESTATUS {
     LIBRE_4 = 0b01000000,
     LIBRE_5 = 0b10000000,
 };
+
 enum ACCIONES_OPCIONALES {
     /*
     * Acciones opcionales del dispositivo.

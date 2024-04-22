@@ -2,7 +2,7 @@
 * Rutinas de comunicacion por medio de WiFi.
 **/
 
-bool inicializaWiFi(void) {
+bool COMS_WIFI::inicializarWiFi(void) {
     /*
     * Rutina que conecta el cliente a la red wifi.
     * retorna FALSE si la coneccion no se pudo establecer

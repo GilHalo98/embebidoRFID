@@ -2,7 +2,7 @@
  * Interfaz de endpoint de registro de reporte.
  * */
 
-respuestaIoT registrarReporteAcceso(void) {
+respuestaIoT INTERFAZ::registrarReporteAcceso(void) {
     /*
     * Función de consulta de usuarios de la API.
     */
@@ -53,15 +53,20 @@ respuestaIoT registrarReporteAcceso(void) {
 
         // Verificamos que el codigo http sea valido.
         if(httpCode > 0) {
-            // HTTP header has been send and Server response header has been handled
+            // HTTP header has been send and Server
+            // response header has been handled
             Serial.printf("[HTTP] POST... code: %d\n", httpCode);
 
             // Se evalua la validez del codigo retornado.
-            if(httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY) {
+            if(
+                httpCode == HTTP_CODE_OK
+                || httpCode == HTTP_CODE_MOVED_PERMANENTLY
+            ) {
                 // Si el codigo es OK (200) entonces la peticion
                 // se realizo con exito.
 
-                // Recuperamos los datos de la consulta en formato String.
+                // Recuperamos los datos de la consulta
+                // en formato String.
                 String respuestaString = registroHTTP.getString();
 
                 // Instanciamos un buffer json.
@@ -74,13 +79,20 @@ respuestaIoT registrarReporteAcceso(void) {
                 // Mostramos la respuesta por el monitor serial.
                 // serializeJson(bufferJson, Serial);
 
-                // Agregamos el codigo de respuesta del API al modelo de la respuesta.
-                respuesta.codigoRespuesta = bufferJson["codigoRespuesta"].as<int>();
+                // Agregamos el codigo de respuesta del API al
+                // modelo de la respuesta.
+                respuesta.codigoRespuesta = bufferJson[
+                    "codigoRespuesta"
+                ].as<int>();
             }
 
         } else {
-            // Si el codigo no es valido, la peticion retorna un codigo http invalido.
-            Serial.printf("[HTTP] POST... failed, error: %s\n", registroHTTP.errorToString(httpCode).c_str());
+            // Si el codigo no es valido, la peticion retorna un
+            // codigo http invalido.
+            Serial.printf(
+                "[HTTP] POST... failed, error: %s\n",
+                registroHTTP.errorToString(httpCode).c_str()
+            );
         }
 
         // Terminamos la consulta http.

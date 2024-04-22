@@ -2,7 +2,7 @@
 * Rutinas para la comunicacion SPI.
 * */
 
-bool inicializarSPI(void) {
+bool COMS_SPI::inicializarSPI(void) {
     /*
     * Inicializa la comunicacion SPI.
     * */

@@ -2,16 +2,16 @@
  * Controladores del RFID.
  * */
 
-bool esperaTarjeta(void) {
+bool CONTROLADOR_RFID::esperaTarjeta(void) {
     /*
      * Espera el ingreso de la tarjeta.
     **/
 
     // Limpiamos el buffer del RC522.
-    limpiarBufferRFID();
+    RFID::limpiarBufferRFID();
 
     // Verificamos que haya una tarjeta presente en el RC522.
-    if(hayTarjetaPresente()) {
+    if(RFID::hayTarjetaPresente()) {
         // Si se detecto una tarjeta, se manda al ESTADO de lectura de datos.
         ESTADO = ESTADOS::AUTENTIFICACION_TARJETA;
 
@@ -26,14 +26,14 @@ bool esperaTarjeta(void) {
     return true;
 };
 
-bool autentificarTarjeta(void) {
+bool CONTROLADOR_RFID::autentificarTarjeta(void) {
     /*
      * Autentifica las llaves de la tarjeta ingresada.
      * */
 
     // Autentificamos los bloques de los datos del empleado en la tarjeta.
-    if(autentificarTarjetaLectura(BLOCK_ID)) {
-        if(autentificarTarjetaLectura(BLOCK_PERMISOS)) {
+    if(RFID::autentificarTarjetaLectura(BLOCK_ID)) {
+        if(RFID::autentificarTarjetaLectura(BLOCK_PERMISOS)) {
             // Si los datos fueron autentificados exitosamente
             // se pasa al ESTADO de lectura de tarjeta.
             ESTADO = ESTADOS::LEER_DATOS_TARJETA;
@@ -49,13 +49,13 @@ bool autentificarTarjeta(void) {
     return true;
 };
 
-bool leerDatosTarjeta(void) {
+bool CONTROLADOR_RFID::leerDatosTarjeta(void) {
     /*
      * Lee los datos del empleado de la tarjeta.
      * */
 
     // Realizamos la lectura de los datos de la tarjeta.
-    bool lecturaOK = lecturaRFID();
+    bool lecturaOK = RFID::lecturaRFID();
 
     // Si la lectura fallo.
     if(!lecturaOK) {

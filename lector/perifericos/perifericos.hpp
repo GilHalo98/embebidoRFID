@@ -2,27 +2,39 @@
  * Controlador de perifericos del actuador.
  * */
 
-// Inicializa los GPIO.
-bool inicializarGPIO(void);
+namespace GPIO {
+    /*
+    * Funciones para el uso de los GPIOs
+    */
 
-// Realiza un toggle sobre el pin dado.
-bool toggleGPIO(int);
+    // Inicializa los GPIO.
+    bool inicializarGPIO(void);
 
-// Inicializa el RC522.
-bool inicializarRFID(void);
+    // Realiza un toggle sobre el pin dado.
+    bool toggleGPIO(int);
+};
 
-// Limpiamos el buffer del RC522.
-bool limpiarBufferRFID(void);
+namespace RFID {
+    /*
+    * Funciones para el uso del modulo RC522.
+    */
 
-// Lee la tarjeta por el RC522.
-bool lecturaRFID(void);
+    // Inicializa el RC522.
+    bool inicializarRFID(void);
 
-// Detectamos si hay una tarjeta presente.
-bool hayTarjetaPresente(void);
+    // Limpiamos el buffer del RC522.
+    bool limpiarBufferRFID(void);
 
-// Autentificamos la tarjeta para la lectura.
-bool autentificarTarjetaLectura(int);
+    // Lee la tarjeta por el RC522.
+    bool lecturaRFID(void);
+
+    // Detectamos si hay una tarjeta presente.
+    bool hayTarjetaPresente(void);
+
+    // Autentificamos la tarjeta para la lectura.
+    bool autentificarTarjetaLectura(int);
+};
 
 // Incluimos las funciones.
-#include "./gpio.cpp"
 #include "./rc522.cpp"
+#include "./gpio.cpp"

@@ -39,8 +39,11 @@ bool RFID::limpiarBufferRFID(void) {
     * y reseteamos la bandera de acceso.
     **/
 
+    // Limpiamos el buffer del rfid.
     mfrc522.PICC_HaltA();
     mfrc522.PCD_StopCrypto1();
+
+    // Reseteamos los datos del empelado.
     CREDENCIALES_VALIDAS = false;
     ID_EMPLEADO = "";
     ROL_EMPLEADO = 0;

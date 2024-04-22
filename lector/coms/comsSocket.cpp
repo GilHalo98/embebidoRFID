@@ -2,7 +2,7 @@
  * Rutinas para la comunicacion por medio de sockets.
  * */
 
-void handlerEventosSocket(
+void COMS_SOCKETS::handlerEventosSocket(
     socketIOmessageType_t type,
     uint8_t* payload,
     size_t length
@@ -77,14 +77,14 @@ void handlerEventosSocket(
     }
 };
 
-bool inicializarSockets(void) {
+bool COMS_SOCKETS::inicializarSockets(void) {
     Socket.setAuthorization(ACCESS_TOKEN);
     Socket.begin(IP_API, PORT_API, "/socket.io/?EIO=4");
     Socket.onEvent(handlerEventosSocket);
     return true;
 };
 
-bool reportarEstatusDispositivo(void) {
+bool COMS_SOCKETS::reportarEstatusDispositivo(void) {
     // creat JSON message for Socket.IO (event)
     DynamicJsonDocument buffer(1024);
     JsonArray array = buffer.to<JsonArray>();
@@ -109,7 +109,7 @@ bool reportarEstatusDispositivo(void) {
     return true;
 };
 
-bool enviarPeticionAcceso(void) {
+bool COMS_SOCKETS::enviarPeticionAcceso(void) {
     // creat JSON message for Socket.IO (event)
     DynamicJsonDocument buffer(1024);
     JsonArray array = buffer.to<JsonArray>();
@@ -132,7 +132,7 @@ bool enviarPeticionAcceso(void) {
     return true;
 };
 
-bool enviarPeticionAccesoBloqueo(void) {
+bool COMS_SOCKETS::enviarPeticionAccesoBloqueo(void) {
     // creat JSON message for Socket.IO (event)
     DynamicJsonDocument buffer(1024);
     JsonArray array = buffer.to<JsonArray>();
@@ -155,7 +155,7 @@ bool enviarPeticionAccesoBloqueo(void) {
     return true;
 };
 
-bool enviarPeticionAccesoDesbloqueo(void) {
+bool COMS_SOCKETS::enviarPeticionAccesoDesbloqueo(void) {
     // creat JSON message for Socket.IO (event)
     DynamicJsonDocument buffer(1024);
     JsonArray array = buffer.to<JsonArray>();
@@ -178,7 +178,7 @@ bool enviarPeticionAccesoDesbloqueo(void) {
     return true;
 };
 
-bool procesarEventosPersonalizados(void) {
+bool COMS_SOCKETS::procesarEventosPersonalizados(void) {
     /*
     * Procesamos los eventos personalizados que lleguen por sockets.
     */

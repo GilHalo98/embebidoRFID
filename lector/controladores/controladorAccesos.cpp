@@ -2,7 +2,7 @@
 * Controlaodres de accesos del dispositivo.
 **/
 
-bool validarAcceso(void) {
+bool CONTROLADOR_ACCESOS::validarAcceso(void) {
     /*
     * Valida los permisos de acceso del empleado y se le garantiza o niega el acceso.
     **/

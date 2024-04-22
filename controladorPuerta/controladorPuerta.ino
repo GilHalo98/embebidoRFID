@@ -19,14 +19,9 @@ void setup(void) {
     digitalWrite(NODE_LED, HIGH);
     digitalWrite(ESP_LED, HIGH);
 
-    // Inicializamos la memoria EEPROM.
-    inicializarEEPROM();
-
-    // Inicializamos los buses de comunicacion.
-    inicializarComs();
-
-    // Esperamos por incio de configuracion en tiempo de boot.
-    checarPorConfiguracion();
+    // Inicializamos los buses de comunicacion y la
+    // memoria EEPROM y checamos por configuracion de variables.
+    CONTROLADOR_INICIALIZAR::inicializar();
 };
 
 void loop(void) {
@@ -47,10 +42,10 @@ void loop(void) {
         Serial.println(ESTATUS_DISPOSITIVO);
 
         // Mandamos el status del dispositivo.
-        reportarEstatusDispositivo();
+        COMS_SOCKETS::reportarEstatusDispositivo();
 
         // Mostramos el estatus actual desde la torreta.
-        mostrarEstatusTorreta();
+        GPIO::mostrarEstatusTorreta();
 
         // El estatus anterior lo tomamos del estatus actual.
         ESTATUS_DISPOSITIVO_ANTERIOR = ESTATUS_DISPOSITIVO;
@@ -59,8 +54,12 @@ void loop(void) {
     // Si el dispositivo recivo el evento de identificarse
     // parpadeamos el led del node.
     if(IDENTIFICARSE) {
-        if(millis() % FRECUENCIA_PARPADEO == 0) {
-            toggleGPIO(LED_IDENTIFICACION);
+        if(millis() - TEMPORIZADOR >= FRECUENCIA_PARPADEO) {
+            // Realizamos un toggle del led indicador.
+            GPIO::toggleGPIO(LED_IDENTIFICACION);
+
+            // Actualizamos el tiempo.
+            TEMPORIZADOR = millis();
         }
     }
 
@@ -69,54 +68,59 @@ void loop(void) {
     if(millis() % FRECUENCIA_ACTUALIZACION_MAIN == 0) {
         switch(ESTADO) {
             case ESTADOS::CONFIGURAR_VARIABLES: {
-                configurarVariables();
+                CONTROLADOR_CONFIGURACION::configurarVariables();
                 break;
 
             } case ESTADOS::CARGAR_CONFIGURACION_EEPROM: {
-                cargarConfiguracionEEPROM();
+                CONTROLADOR_INICIALIZAR::cargarConfiguracionEEPROM();
                 break;
 
             } case ESTADOS::CONEXION_RED: {
-                conexionRed();
+                CONTROLADOR_INICIALIZAR::conexionRed();
                 break;
 
             } case ESTADOS::INICIALIZAR_CONEXION_SOCKETS: {
-                inicializarConexionSockets();
+                CONTROLADOR_INICIALIZAR::inicializarConexionSockets();
                 break;
 
             } case ESTADOS::ESPERA_CONEXION_SOCKETS: {
-                esperaConfirmacionSockets();
+                CONTROLADOR_SOCKETS::esperaConfirmacionSockets();
                 break;
 
             } case ESTADOS::INICIALIZAR_PERIFERICOS: {
-                inicializarPerifericos();
+                CONTROLADOR_INICIALIZAR::inicializarPerifericos();
+                break;
+
+            } case ESTADOS::ERROR_PERIFERICOS: {
+                CONTROLADOR_ERROR::errorInicializacionPerifericos();
                 break;
 
             } case ESTADOS::ESPERA_EVENTO: {
-                esperarPorEvento();
+                CONTROLADOR_SOCKETS::esperarPorEvento();
                 break;
 
             } case ESTADOS::ABRIR_PUERTA: {
-                abrirPuerta();
+                CONTROLADOR_PERIFERICOS::abrirPuerta();
                 break;
 
             } case ESTADOS::ESPEAR_APERTURA: {
-                esperarApertura();
+                CONTROLADOR_PERIFERICOS::esperarApertura();
                 break;
 
             } case ESTADOS::ESPERA_PUERTA_ABIERTA: {
-                esperarPase();
+                CONTROLADOR_PERIFERICOS::esperarPase();
                 break;
 
             } case ESTADOS::CERRAR_PUERTA: {
-                cerrarPuerta();
+                CONTROLADOR_PERIFERICOS::cerrarPuerta();
                 break;
 
             } case ESTADOS::ESPEAR_CIERRE: {
-                esperarCierre();
+                CONTROLADOR_PERIFERICOS::esperarCierre();
                 break;
 
             } default: {
+                CONTROLADOR_ERROR::halt();
                 break;
             }
         }

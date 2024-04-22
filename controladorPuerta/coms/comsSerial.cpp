@@ -2,7 +2,7 @@
 * Rutinas para la comunicacion Serial.
 * */
 
-bool inicializarSerial(void) {
+bool COMS_SERIAL::inicializarSerial(void) {
     /*
     * Inicializa la comunicacion serial.
     * */
@@ -15,7 +15,7 @@ bool inicializarSerial(void) {
     return true;
 };
 
-int checarPorEvento(void) {
+int COMS_SERIAL::checarPorEvento(void) {
     /*
      * Checa si se ha recivido algun evento sobre el bus Serial.
      * */
@@ -27,7 +27,7 @@ int checarPorEvento(void) {
     return -1;
 };
 
-bool checarPorConfiguracion() {
+bool COMS_SERIAL::checarPorConfiguracionBOOT() {
     /*
     * Enviamos el evento de configuracion por Serial
     * si se responde con OK, retornamos true.

@@ -2,7 +2,7 @@
 * Rutinas de comunicacion por medio de WiFi.
 **/
 
-bool inicializaWiFi(void) {
+bool COMS_WIFI::inicializarWiFi(void) {
     /*
     * Rutina que conecta el cliente a la red wifi.
     * retorna FALSE si la coneccion no se pudo establecer
@@ -48,7 +48,7 @@ bool inicializaWiFi(void) {
         }
 
         // Esperamos por respuesta de la peticion de conexion.
-        delay(TIEMPO_ESPERA);
+        delay(TIEMPO_ESPERA_CONEXION);
     }
 
     Serial.println("\nConexion establecida");

@@ -2,7 +2,7 @@
  * Controlador del EEPROM para guardar y cargar información permanente.
  * */
 
-bool inicializarEEPROM(void) {
+bool EEPROM_MEM::inicializarEEPROM(void) {
     // Inicializamos la memoria EEPROM.
     EEPROM.begin(DIMENCION_EEPROM);
 
@@ -11,7 +11,7 @@ bool inicializarEEPROM(void) {
     return true;
 };
 
-bool guardarConfiguracion(void) {
+bool EEPROM_MEM::guardarConfiguracion(void) {
     // Instanciamos una estructura con la configuracion.
     CONFIGURACION_DISPOSITIVO configuracion;
 
@@ -52,7 +52,7 @@ bool guardarConfiguracion(void) {
     return true;
 };
 
-bool cargarConfiguracion(void) {
+bool EEPROM_MEM::cargarConfiguracion(void) {
     // Instanciamos una estructura con la configuracion.
     CONFIGURACION_DISPOSITIVO configuracion;
 

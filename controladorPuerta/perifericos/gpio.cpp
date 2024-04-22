@@ -2,7 +2,7 @@
 * Inicializa los GPIOS del embebido.
 **/
 
-bool inicializarGPIO(void) {
+bool GPIO::inicializarGPIO(void) {
     /*
     * Inicializa los GPIO y los establece en un ESTADO.
     **/
@@ -24,7 +24,7 @@ bool inicializarGPIO(void) {
     return true;
 };
 
-bool toggleGPIO(int pin) {
+bool GPIO::toggleGPIO(int pin) {
     /*
     * Realiza un toggle sobre el GPIO dado.
     **/
@@ -34,7 +34,7 @@ bool toggleGPIO(int pin) {
     return true;
 };
 
-bool mostrarEstatusTorreta(void) {
+bool GPIO::mostrarEstatusTorreta(void) {
     /*
     * Mostramos el estatus del dispositivo por medio de la torreta.
     */

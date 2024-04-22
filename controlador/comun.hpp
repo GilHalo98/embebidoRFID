@@ -260,7 +260,7 @@ const int DIMENCION_EEPROM = 2048;
 const int INTENTOS_MAXIMOS = 20;
 
 // Tiempo de espera por intento.
-const int TIEMPO_ESPERA = 2000;
+const int TIEMPO_ESPERA_CONEXION = 2000;
 
 // BaudRate de comunicacion serial.
 unsigned long BAUD = 115200;
@@ -284,15 +284,21 @@ String IP_API = "";
 // URL de la version del api a usar.
 String VERSION_API = "";
 
-// Frecuencia de actualizacion del manager de estados.
-int FRECUENCIA_ACTUALIZACION_MAIN = 100;
-
 // Indica si el dispositivo recivio el evento de identificarse.
 bool IDENTIFICARSE = false;
-
-// Frecuencia del parpadeo del led del node.
-int FRECUENCIA_PARPADEO = 250;
 
 // Indica si las credenciales son validas
 // para iniciar la actividad o no.
 bool CREDENCIALES_VALIDAS = false;
+
+// Indica si la actividad fue forzada.
+bool ACTIVIDAD_FORZADA = false;
+
+// Frecuencia de actualizacion del manager de estados.
+unsigned long int FRECUENCIA_ACTUALIZACION_MAIN = 100;
+
+// Frecuencia del parpadeo del led del node.
+unsigned long int FRECUENCIA_PARPADEO = 250;
+
+// Tiempo de temporizador.
+unsigned long int TEMPORIZADOR;

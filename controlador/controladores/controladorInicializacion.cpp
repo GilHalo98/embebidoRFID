@@ -18,7 +18,7 @@ bool CONTROLADOR_INICIALIZAR::inicializar(void) {
 
     // Esperamos por incio de configuracion en tiempo de boot.
     if(COMS_SERIAL::checarPorConfiguracionBOOT()) {
-        // Cambiamos el estado a carga de configuracion desde la EEPROM.
+        // Cambiamos el estado a cconfiguracion de variables.
         ESTADO = ESTADOS::CONFIGURAR_VARIABLES;
 
     } else {

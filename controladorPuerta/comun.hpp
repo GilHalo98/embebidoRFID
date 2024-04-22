@@ -43,6 +43,9 @@ enum ESTADOS {
     * Estados posibles del lector RFID.
     */
 
+    // Estado de halt.
+    HALT,
+
     // Estado inicial del esp8266.
     INICIALIZACION,
 
@@ -148,12 +151,22 @@ enum ESTATUS {
     // Status de dispositivo no inicializado.
     DESCONECTADO = 0b00000000,
 
+    // Estatus de conexion con el servidor sockets.
     CONECTADO = 0b00000001,
+
+    // Estatus de libre para realizar operacion.
     LIBRE = 0b00000010,
-    PERIFERICOS_NO_INICIALIZADOS = 0b00000100,
+
+    // Estatus de error con dispositivo.
+    ERROR = 0b00000100,
+
+    // Estatus de dispositivo ocupado.
     OCUPADO = 0b00001000,
+
+    // Estatus de dispositivo bloqueado.
     BLOQUEADO = 0b00010000,
 
+    // Banderas libres.
     LIBRE_3 = 0b00100000,
     LIBRE_4 = 0b01000000,
     LIBRE_5 = 0b10000000,
@@ -179,8 +192,8 @@ const int DIMENCION_EEPROM = 2048;
 // Intentos maximos de conexion a red.
 const int INTENTOS_MAXIMOS = 20;
 
-// Tiempo de espera por intento.
-const int TIEMPO_ESPERA = 2000;
+// Tiempo de espera por intento de conexion.
+const int TIEMPO_ESPERA_CONEXION = 2000;
 
 // BaudRate de comunicacion serial.
 unsigned long BAUD = 115200;
@@ -198,14 +211,8 @@ int PORT_API = 0;
 // IP del servidor api
 String IP_API = "";
 
-// Frecuencia de actualizacion del manager de estados.
-int FRECUENCIA_ACTUALIZACION_MAIN = 100;
-
 // Indica si el dispositivo recivio el evento de identificarse.
 bool IDENTIFICARSE = false;
-
-// Frecuencia del parpadeo del led del node.
-int FRECUENCIA_PARPADEO = 250;
 
 // Indica si se ejecutara la secuencia completa de apertura/cerrado
 // de la puerta.
@@ -216,3 +223,12 @@ bool BLOQUEAR_PUERTA = false;
 
 // Indica si la puerta sera desbloqueada.
 bool DESBLOQUEAR_PUERTA = false;
+
+// Frecuencia de actualizacion del manager de estados.
+unsigned long int FRECUENCIA_ACTUALIZACION_MAIN = 100;
+
+// Frecuencia del parpadeo del led del node.
+unsigned long int FRECUENCIA_PARPADEO = 250;
+
+// Tiempo de temporizador.
+unsigned long int TEMPORIZADOR;

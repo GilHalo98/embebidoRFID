@@ -2,7 +2,7 @@
  * Rutinas para la comunicacion por medio de sockets.
  * */
 
-void handlerEventosSocket(
+void COMS_SOCKETS::handlerEventosSocket(
     socketIOmessageType_t type,
     uint8_t* payload,
     size_t length
@@ -51,7 +51,7 @@ void handlerEventosSocket(
             EVENTO_RECIVIDO = (char *) payload;
 
             // Procesamos los eventos personalizados.
-            procesarEventosPersonalizados();
+            COMS_SOCKETS::procesarEventosPersonalizados();
 
             break;
 
@@ -77,7 +77,7 @@ void handlerEventosSocket(
     }
 };
 
-bool inicializarSockets(void) {
+bool COMS_SOCKETS::inicializarSockets(void) {
     Socket.setAuthorization(ACCESS_TOKEN);
     Socket.begin(IP_API, PORT_API, "/socket.io/?EIO=4");
     Socket.onEvent(handlerEventosSocket);
@@ -86,7 +86,7 @@ bool inicializarSockets(void) {
     return true;
 };
 
-bool reportarEstatusDispositivo(void) {
+bool COMS_SOCKETS::reportarEstatusDispositivo(void) {
     // creat JSON message for Socket.IO (event)
     DynamicJsonDocument buffer(1024);
     JsonArray array = buffer.to<JsonArray>();
@@ -111,7 +111,7 @@ bool reportarEstatusDispositivo(void) {
     return true;
 };
 
-bool procesarEventosPersonalizados(void) {
+bool COMS_SOCKETS::procesarEventosPersonalizados(void) {
     /*
     * Esperamos que se emita un evento al cliente.
     */
@@ -152,7 +152,7 @@ bool procesarEventosPersonalizados(void) {
         // Si el evento es de tipo toggle_identificarse.
         else if(evento == "toggle_identificarse") {
             if(IDENTIFICARSE) {
-                digitalWrite(LED_IDENTIFICACION, HIGH);
+                digitalWrite(LED_IDENTIFICACION, LOW);
             }
 
             // Hacemos toggle a la variable que indica al dispostivo

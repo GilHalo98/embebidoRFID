@@ -53,8 +53,12 @@ void loop(void) {
     // Si el dispositivo recivo el evento de identificarse
     // parpadeamos el led del node.
     if(IDENTIFICARSE) {
-        if(millis() % FRECUENCIA_PARPADEO == 0) {
+        if(millis() - TEMPORIZADOR >= FRECUENCIA_PARPADEO) {
+            // Realizamos un toggle del led indicador.
             GPIO::toggleGPIO(LED_IDENTIFICACION);
+
+            // Actualizamos el tiempo.
+            TEMPORIZADOR = millis();
         }
     }
 

@@ -131,12 +131,35 @@ bool COMS_SOCKETS::procesarEventosPersonalizados(void) {
         // Si el evento es de tipo toggle_identificarse.
         if(evento == "toggle_identificarse") {
             if(IDENTIFICARSE) {
-                digitalWrite(LED_IDENTIFICACION, HIGH);
+                digitalWrite(LED_IDENTIFICACION, LOW);
             }
 
             // Hacemos toggle a la variable que indica al dispostivo
             // identificarse.
             IDENTIFICARSE = !IDENTIFICARSE;
+        }
+
+        // Si evento es de tipo activar, iniciamos la
+        // tarea del dispositivo.
+        else if(evento == "activar") {
+            // Cambiamos el estado a iniciar actividad.
+            ESTADO = ESTADOS::INICIO_ACTIVIDAD;
+
+            // Cambiamos el estatus del dispositivo a ocupado.
+            ESTATUS_DISPOSITIVO = ESTATUS::OCUPADO;
+
+            // Indicamos que la actividad sera forzada por monitor.
+            ACTIVIDAD_FORZADA = true;
+        }
+
+        // Si evento es de tipo desactivar, iniciamos la
+        // tarea del dispositivo.
+        else if(evento == "desactivar") {
+            // Cambiamos el estado a iniciar actividad.
+            ESTADO = ESTADOS::TERMINAR_ACTIVIDAD;
+
+            // Indicamos que la actividad sera forzada por monitor.
+            ACTIVIDAD_FORZADA = true;
         }
     }
 

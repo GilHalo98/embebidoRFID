@@ -44,7 +44,7 @@ bool inicializarPerifericos(void) {
         ESTADO = ESTADOS::ERROR_PERIFERICOS;
 
         // Cambiamos el status del dispositivo.
-        ESTATUS_DISPOSITIVO = ESTATUS::PERIFERICOS_NO_INICIALIZADOS;
+        ESTATUS_DISPOSITIVO = ESTATUS::ERROR;
     }
 
     return true;

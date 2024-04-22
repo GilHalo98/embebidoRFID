@@ -1,5 +1,5 @@
 // Abrimos la puerta.
-bool abrirPuerta(void) {
+bool CONTROLADOR_PERIFERICOS::abrirPuerta(void) {
     digitalWrite(RELE_1, LOW);
 
     // Cambiamos el estado por espera de evento.
@@ -8,7 +8,7 @@ bool abrirPuerta(void) {
 };
 
 // Esperamos a que la puerta sea abierta.
-bool esperarApertura(void) {
+bool CONTROLADOR_PERIFERICOS::esperarApertura(void) {
     delay(2000);
 
     digitalWrite(RELE_1, HIGH);
@@ -31,7 +31,7 @@ bool esperarApertura(void) {
 };
 
 // cerramos la puerta.
-bool cerrarPuerta(void) {
+bool CONTROLADOR_PERIFERICOS::cerrarPuerta(void) {
     digitalWrite(RELE_2, LOW);
     // Cambiamos el estado por espera de evento.
     ESTADO = ESTADOS::ESPEAR_CIERRE;
@@ -39,7 +39,7 @@ bool cerrarPuerta(void) {
 };
 
 // Esperamos a que la puerta sea cerrada.
-bool esperarCierre(void) {
+bool CONTROLADOR_PERIFERICOS::esperarCierre(void) {
     delay(2000);
 
     digitalWrite(RELE_2, HIGH);
@@ -67,3 +67,12 @@ bool esperarCierre(void) {
 
     return true;
 };
+
+bool CONTROLADOR_PERIFERICOS::esperarPase(void) {
+    // Espera un tiempo para que la puerta sea cerrada.
+    if(millis() % 5000 == 0) {
+        ESTADO = ESTADOS::CERRAR_PUERTA;
+    }
+
+    return true;
+}

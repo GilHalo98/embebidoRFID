@@ -3,13 +3,19 @@
 * de configuración del dispositivo.
 */
 
-// Inicializamos la memoria EEPROM.
-bool inicializarEEPROM(void);
+namespace EEPROM_MEM {
+    /*
+    * Funciones para el uso de la memoria EEPROM.
+    */
 
-// Guarda la configuración del dispositivo, red y api en la EEPROM.
-bool guardarConfiguracion(void);
+    // Inicializamos la memoria EEPROM.
+    bool inicializarEEPROM(void);
 
-// Carga la configuracion del dispostivo, red y api de la EEPROM.
-bool cargarConfiguracion(void);
+    // Guarda la configuración del dispositivo, red y api en la EEPROM.
+    bool guardarConfiguracion(void);
+
+    // Carga la configuracion del dispostivo, red y api de la EEPROM.
+    bool cargarConfiguracion(void);
+};
 
 #include "./eeprom.cpp"

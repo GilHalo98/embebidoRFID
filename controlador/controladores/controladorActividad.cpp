@@ -47,10 +47,14 @@ bool CONTROLADOR_ACTIVIDAD::enActividad(void) {
     * de detectar parla la actividad.
     */
 
-    // Si no hay tarjeta presente.
-    if(!RFID::lecturaContinua()) {
-        // Se cambia el estatus al de terminarActividad.
-        ESTADO = ESTADOS::TERMINAR_ACTIVIDAD;
+    // Si la actividad fue forzada, no checamos la presencia de
+    // la tarjeta en el lector.
+    if(!ACTIVIDAD_FORZADA) {
+        // Si no hay tarjeta presente.
+        if(!RFID::lecturaContinua()) {
+            // Se cambia el estatus al de terminarActividad.
+            ESTADO = ESTADOS::TERMINAR_ACTIVIDAD;
+        }   
     }
 
     return true;
@@ -66,8 +70,19 @@ bool CONTROLADOR_ACTIVIDAD::terminarActividad(void) {
     // Activamos un relevados.
     digitalWrite(RELE_1, HIGH);
 
-    // Cambiamos el estado.
-    ESTADO = ESTADOS::REPORTE_ACTIVIDAD_FINALIZADA;
+    // Si la actividad esta fue forzada y se termino, se pasa
+    // directamente al estado de espera de tarjeta.
+    if(ACTIVIDAD_FORZADA) {
+        // Cambiamos el estado.
+        ESTADO = ESTADOS::ESPERA_TARJETA;
+
+        // Cambiamos el indicador de actividad forzada a falso.
+        ACTIVIDAD_FORZADA = false;
+
+    } else {
+        // Cambiamos el estado.
+        ESTADO = ESTADOS::REPORTE_ACTIVIDAD_FINALIZADA;
+    }
 
     return true;
 };

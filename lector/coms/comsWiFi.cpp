@@ -48,7 +48,7 @@ bool inicializaWiFi(void) {
         }
 
         // Esperamos por respuesta de la peticion de conexion.
-        delay(TIEMPO_ESPERA);
+        delay(TIEMPO_ESPERA_CONEXION);
     }
 
     Serial.println("\nConexion establecida");

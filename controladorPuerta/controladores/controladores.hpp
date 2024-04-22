@@ -2,56 +2,87 @@
 * Rutinas de los controladores de los estados del esp8266
 */
 
-// Controlador de configuracion de variables.
-bool configurarVariables(void);
+namespace CONTROLADOR_CONFIGURACION {
+    /*
+    * Controladores de configuracion del dispositivo.
+    */
 
-// Controlador de inicializacion de buses de comunicacion.
-bool inicializarComs(void);
+    // Recive y almacena la configuracion recivida por serial.
+    bool configurarVariables(void);
+};
 
-// Controlador de inicializacion de perifericos.
-bool inicializarPerifericos(void);
+namespace CONTROLADOR_INICIALIZAR {
+    /*
+    * Controladores de inicializacion del dispositivo.
+    */
 
-// Controlador de inicializacion de sockets.
-bool inicializarConexionSockets(void);
+    // Inicializa la conexion con el server sockets.
+    bool inicializarConexionSockets(void);
 
-// Controlador de carga de datos de la EEPROM.
-bool cargarConfiguracionEEPROM(void);
+    // Carga la configuracion del dispositivo almacenada en la EEPROM.
+    bool cargarConfiguracionEEPROM(void);
 
-// Controlador de iniciar conexion a red.
-bool conexionRed(void);
+    // Inicializa los perifericos del dispositivo.
+    bool inicializarPerifericos(void);
 
-// Controlador de error con conexion a API.
-bool errorAPI(void);
+    // Inicializa los buses de comunicacion del dispositivo.
+    bool inicializar(void);
 
-// Error de inicializacion de perifericos.
-bool errorInicializacionPerifericos(void);
+    // Inicializa el modulo wifi del dispositivo.
+    bool conexionRed(void);
+};
 
-// Esperamos por la confirmacion de la conexion al socket server.
-bool esperaConfirmacionSockets(void);
+namespace CONTROLADOR_ERROR {
+    /*
+    * Controladores de lector ERROR del dispositivo.
+    */
 
-// Esperamos por un evento por medio de sockets.
-bool esperarPorEvento(void);
+    // Error con la inicializacion deperifericos del dispositivo.
+    bool errorInicializacionPerifericos(void);
 
-// Esperamos un tiempo y despues cerramos la puerta.
-bool esperarPase(void);
+    // HALT.
+    bool halt(void);
+};
 
-// Realizamos la accion del actuador.
-bool realizarAccion(void);
+namespace CONTROLADOR_SOCKETS {
+    /*
+    * Controladores de la api.
+    */
 
-// Abrimos la puerta.
-bool abrirPuerta(void);
+    // Esperamos por un evento por medio de sockets.
+    bool esperarPorEvento(void);
 
-// Esperamos a que la puerta sea abierta.
-bool esperarApertura(void);
+    // Espera la confirmacion de la conexion al servidor sockets.
+    bool esperaConfirmacionSockets(void);
+};
 
-// cerramos la puerta.
-bool cerrarPuerta(void);
+namespace CONTROLADOR_PERIFERICOS {
+    /*
+    * Controladores de los perifericos.
+    */
 
-// Esperamos a que la puerta sea cerrada.
-bool esperarCierre(void);
+    // Esperamos un tiempo y despues cerramos la puerta.
+    bool esperarPase(void);
+
+    // Realizamos la accion del actuador.
+    bool realizarAccion(void);
+
+    // Abrimos la puerta.
+    bool abrirPuerta(void);
+
+    // Esperamos a que la puerta sea abierta.
+    bool esperarApertura(void);
+
+    // cerramos la puerta.
+    bool cerrarPuerta(void);
+
+    // Esperamos a que la puerta sea cerrada.
+    bool esperarCierre(void);
+};
 
 // Importamos las funciones de los controladores
-#include "./controladorConfig.cpp"
 #include "./controladorInicializacion.cpp"
-#include "./controladorEventos.cpp"
 #include "./controladorPerifericos.cpp"
+#include "./controladorEventos.cpp"
+#include "./controladorConfig.cpp"
+#include "./controladorError.cpp"

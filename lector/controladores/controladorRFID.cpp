@@ -20,7 +20,7 @@ bool esperaTarjeta(void) {
 
     } else {
         // Se cambia el estadus del dispositivo a nominal.
-        ESTATUS_DISPOSITIVO = ESTATUS::DESOCUPADO;
+        ESTATUS_DISPOSITIVO = ESTATUS::LIBRE;
     }
 
     return true;

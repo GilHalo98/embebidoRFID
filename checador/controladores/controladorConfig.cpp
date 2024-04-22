@@ -2,12 +2,12 @@
 * Controladores para la configuracion del dispositivo.
 **/
 
-bool configurarVariables(void) {
+bool CONTROLADOR_CONFIGURACION::configurarVariables(void) {
     /*
     * Controlador para configuar las variables del dispositivo.
     **/
 
-    switch(checarPorEvento()) {
+    switch(COMS_SERIAL::checarPorEvento()) {
         case EVENTOS::CAMBIAR_SSID: {
             // Este se unira con el de cambiar password y se creara
             // un ESTADO unico para la configuracion de los datos.
@@ -99,7 +99,7 @@ bool configurarVariables(void) {
 
             // Al finalizar la modificacion de la configuracion, esta se
             // guarda en la EEPROM.
-            guardarConfiguracion();
+            EEPROM_MEM::guardarConfiguracion();
 
             Serial.println("Configuracion guardada");
 

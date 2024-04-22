@@ -2,7 +2,7 @@
  * Interfaz de endpoint de reporte de chequeo.
  * */
 
-respuestaIoT registrarReporteChequeo(void) {
+respuestaIoT INTERFAZ::registrarReporteChequeo(void) {
     /*
     * Función de registro de reporte de chequeo.
     */
@@ -62,7 +62,8 @@ respuestaIoT registrarReporteChequeo(void) {
                 // Si el codigo es OK (200) entonces la peticion
                 // se realizo con exito.
 
-                // Recuperamos los datos de la consulta en formato String.
+                // Recuperamos los datos de la consulta en
+                // formato String.
                 String respuestaString = registroHTTP.getString();
 
                 // Instanciamos un buffer json.

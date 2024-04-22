@@ -2,14 +2,39 @@
 * Controlador del API.
 **/
 
-bool validarExistenciaEmpleado(void) {
+bool CONTROLADOR_API::verificarEstadoApi(void) {
+    /*
+     * Verifica la conexion con la API.
+     * */
+
+    // Consultamos el estado de la API.
+    respuestaIoT verificacion = INTERFAZ::verificarConexionApi();
+
+    // Si el codigo de la respuesta es menor que 0, ocurrio
+    // un problema de conexion con la api.
+    if(verificacion.codigoRespuesta < 0) {
+        // En caso de error de conexion, mandamos el estado
+        // a error de conexion con api.
+        ESTADO = ESTADOS::ERROR_CONEXION_API;
+
+        return false;
+    }
+
+    // Si no hay problema con la conexion de api, cambiamos el estado
+    // al estaod de inicializacion de conexion con sockets.
+    ESTADO = ESTADOS::INICIALIZAR_CONEXION_SOCKETS;
+
+    return true;
+};
+
+bool CONTROLADOR_API::validarExistenciaEmpleado(void) {
     /*
     * Valida los datos del empleado en la tarjeta, que exista un
     * registro en la base de datos.
     **/
 
     // Consultamos si el registro existe en la base de datos.
-    respuestaIoT validacion = validarRegistroEmpleado();
+    respuestaIoT validacion = INTERFAZ::validarRegistroEmpleado();
 
     // Si el codigo de la respuesta es menor que 0, ocurrio un problema con
     // el API.
@@ -33,14 +58,14 @@ bool validarExistenciaEmpleado(void) {
     return true;
 };
 
-bool reporteChequeo(void) {
+bool CONTROLADOR_API::reporteChequeo(void) {
     /*
     * Genera un reporte de chequeo del empleado.
     **/
 
 
     // Realizamos el registro del reporte.
-    respuestaIoT respuesta = registrarReporteChequeo();
+    respuestaIoT respuesta = INTERFAZ::registrarReporteChequeo();
 
     // Si el codigo de la respuesta es menor que 0, ocuio un problema con
     // el API.
@@ -64,13 +89,13 @@ bool reporteChequeo(void) {
     return true;
 };
 
-bool reporteErrorAutentificacionTarjeta(void) {
+bool CONTROLADOR_API::reporteErrorAutentificacionTarjeta(void) {
     /*
     * Genera un reporte de tarjeta no autentificada, esto quiere
     * decir que la tarjeta ingresada no pertenece a las tarjetas de accesos
     * de los empleados.
     **/
-    respuestaIoT respuesta = registrarReporteErrorAutentificacionTarjeta();
+    respuestaIoT respuesta = INTERFAZ::registrarReporteErrorAutentificacionTarjeta();
 
     // Si el codigo de la respuesta es menor que 0, ocurrio un problema con
     // el API.
@@ -94,12 +119,12 @@ bool reporteErrorAutentificacionTarjeta(void) {
     return true;
 };
 
-bool reporteEmpleadoInexistente(void) {
+bool CONTROLADOR_API::reporteEmpleadoInexistente(void) {
     /*
     * Genera un reporte de datos de empleado leidos de la tarjeta
     * no coinciden con ningún registro en la base de datos.
     **/
-    respuestaIoT respuesta = registrarReporteEmpleadoInexistente();
+    respuestaIoT respuesta = INTERFAZ::registrarReporteEmpleadoInexistente();
 
     // Si el codigo de la respuesta es menor que 0, ocurrio un problema con
     // el API.

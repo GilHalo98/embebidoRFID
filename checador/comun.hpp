@@ -19,7 +19,6 @@
 #include <ESP8266WiFi.h>
 #include <SocketIOclient.h>
 #include <ESP8266HTTPClient.h>
-#include <LiquidCrystal_I2C.h>
 
 // Estructura que almacena la informacion de configuración del
 // dispositivo y la red.
@@ -48,6 +47,9 @@ enum ESTADOS {
     * Estados posibles del lector RFID.
     */
 
+    // Estado de halt.
+    HALT,
+
     // Estado inicial del esp8266.
     INICIALIZACION,
 
@@ -59,6 +61,9 @@ enum ESTADOS {
 
     // Estado de conexion con la red.
     CONEXION_RED,
+
+    // Realiza una prueba con el servidor API.
+    PROBAR_CONEXION_API,
 
     // Estado de inicializacion de conexion
     // con servidor sockets.
@@ -165,12 +170,22 @@ enum ESTATUS {
     // Status de dispositivo no inicializado.
     DESCONECTADO = 0b00000000,
 
+    // Estatus de conexion con el servidor sockets.
     CONECTADO = 0b00000001,
+
+    // Estatus de libre para realizar operacion.
     LIBRE = 0b00000010,
-    PERIFERICOS_NO_INICIALIZADOS = 0b00000100,
+
+    // Estatus de error con dispositivo.
+    ERROR = 0b00000100,
+
+    // Estatus de dispositivo ocupado.
     OCUPADO = 0b00001000,
+
+    // Estatus de dispositivo bloqueado.
     BLOQUEADO = 0b00010000,
 
+    // Banderas libres.
     LIBRE_3 = 0b00100000,
     LIBRE_4 = 0b01000000,
     LIBRE_5 = 0b10000000,
@@ -193,9 +208,6 @@ int BLOCK_ROL = 6;
 
 // Instanciamos un status para el RFID.
 MFRC522::StatusCode STATUS_RC522;
-
-// Instanciamos el lcd.
-LiquidCrystal_I2C DISPLAY_LCD(0x27, 20, 4);
 
 // Establece el ESTADO actual del esp8266.
 ESTADOS ESTADO;
@@ -221,7 +233,7 @@ const int DIMENCION_EEPROM = 2048;
 const int INTENTOS_MAXIMOS = 20;
 
 // Tiempo de espera por intento.
-const int TIEMPO_ESPERA = 2000;
+const int TIEMPO_ESPERA_CONEXION = 2000;
 
 // BaudRate de comunicacion serial.
 unsigned long BAUD = 115200;
@@ -242,11 +254,14 @@ String IP_API = "";
 // URL de la version del api a usar.
 String VERSION_API = "";
 
-// Frecuencia de actualizacion del manager de estados.
-int FRECUENCIA_ACTUALIZACION_MAIN = 100;
-
 // Indica si el dispositivo recivio el evento de identificarse.
 bool IDENTIFICARSE = false;
 
+// Frecuencia de actualizacion del manager de estados.
+unsigned long int FRECUENCIA_ACTUALIZACION_MAIN = 100;
+
 // Frecuencia del parpadeo del led del node.
-int FRECUENCIA_PARPADEO = 250;
+unsigned long int FRECUENCIA_PARPADEO = 250;
+
+// Tiempo de temporizador.
+unsigned long int TEMPORIZADOR;

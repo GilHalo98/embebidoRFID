@@ -12,6 +12,9 @@ bool COMS_SERIAL::inicializarSerial(void) {
 
     Serial.println("\nSerial inicializado");
 
+    Serial.print("\nVERSION: ");
+    Serial.println(VERSION);
+
     return true;
 };
 

@@ -8,11 +8,14 @@ bool CONTROLADOR_API::verificarEstadoApi(void) {
      * */
 
     // Consultamos el estado de la API.
-    respuestaIoT verificacion = INTERFAZ::verificarConexionApi();
+    respuestaIoT respuesta = INTERFAZ::verificarConexionApi();
+
+    Serial.print("[API] CODIGO DE RESPUESTA DE API: ");
+    Serial.println(respuesta.codigoRespuesta);
 
     // Si el codigo de la respuesta es menor que 0, ocurrio
     // un problema con la API.
-    if(verificacion.codigoRespuesta < 0) {
+    if(respuesta.codigoRespuesta < 0) {
         // En caso de error de conexion, mandamos el estado
         // a error de conexon con api.
         ESTADO = ESTADOS::ERROR_CONEXION_API;
@@ -34,13 +37,16 @@ bool CONTROLADOR_API::validarExistenciaEmpleado(void) {
     **/
 
     // Consultamos si el registro existe en la base de datos.
-    respuestaIoT validacion = INTERFAZ::validarRegistroEmpleado();
+    respuestaIoT respuesta = INTERFAZ::validarRegistroEmpleado();
+
+    Serial.print("[API] CODIGO DE RESPUESTA DE API: ");
+    Serial.println(respuesta.codigoRespuesta);
 
     // Si el codigo de la respuesta es menor que 0, ocurrio
     // un problema con el API.
-    if(validacion.codigoRespuesta >= 0) {
+    if(respuesta.codigoRespuesta >= 0) {
         // Si el codigo es 0, no hubo problema en la consulta.
-        if(validacion.codigoRespuesta == 0) {
+        if(respuesta.codigoRespuesta == 0) {
             // Cambiamos el ESTADO para la validacion de permisos.
             ESTADO = ESTADOS::VALIDAR_INICIO_ACTIVIDAD;
 
@@ -69,6 +75,9 @@ bool CONTROLADOR_API::reporteErrorAutentificacionTarjeta(void) {
     * tarjetas de accesos de los empleados.
     **/
     respuestaIoT respuesta = INTERFAZ::registrarReporteErrorAutentificacionTarjeta();
+
+    Serial.print("[API] CODIGO DE RESPUESTA DE API: ");
+    Serial.println(respuesta.codigoRespuesta);
 
     // Si el codigo de la respuesta es menor que 0, ocurrio un
     // problema con el API.
@@ -104,6 +113,9 @@ bool CONTROLADOR_API::reporteEmpleadoInexistente(void) {
     **/
     respuestaIoT respuesta = INTERFAZ::registrarReporteEmpleadoInexistente();
 
+    Serial.print("[API] CODIGO DE RESPUESTA DE API: ");
+    Serial.println(respuesta.codigoRespuesta);
+
     // Si el codigo de la respuesta es menor que 0, ocurrio
     // un problema con el API.
     if(respuesta.codigoRespuesta >= 0) {
@@ -138,6 +150,9 @@ bool CONTROLADOR_API::reporteInicioActividad(void) {
 
     // Realizamos el registro del reporte.
     respuestaIoT respuesta = INTERFAZ::registroReporteActividadIniciada();
+
+    Serial.print("[API] CODIGO DE RESPUESTA DE API: ");
+    Serial.println(respuesta.codigoRespuesta);
 
     // Si el codigo de la respuesta es menor que 0, ocurrio
     // un problema con el API.
@@ -187,6 +202,9 @@ bool CONTROLADOR_API::reporteActividadFinalizada(void) {
 
     // Realizamos el registro del reporte.
     respuestaIoT respuesta = INTERFAZ::registroReporteActividadFinalizada();
+
+    Serial.print("[API] CODIGO DE RESPUESTA DE API: ");
+    Serial.println(respuesta.codigoRespuesta);
 
     // Si el codigo de la respuesta es menor que 0, ocurrio
     // un problema con el API.

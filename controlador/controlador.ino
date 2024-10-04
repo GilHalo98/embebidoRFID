@@ -48,6 +48,13 @@ void loop(void) {
 
         // El estatus anterior lo tomamos del estatus actual.
         ESTATUS_DISPOSITIVO_ANTERIOR = ESTATUS_DISPOSITIVO;
+
+        // Si el estatus es ocupado, entonces apagamos el led indicador.
+        if(ESTATUS_DISPOSITIVO == ESTATUS::OCUPADO) {
+            digitalWrite(LED_IDENTIFICACION, HIGH);
+        } else {
+            digitalWrite(LED_IDENTIFICACION, LOW);
+        }
     }
 
     // Si el dispositivo recivo el evento de identificarse
@@ -152,6 +159,10 @@ void loop(void) {
 
             } case ESTADOS::REPORTE_ACTIVIDAD_FINALIZADA: {
                 CONTROLADOR_API::reporteActividadFinalizada();
+                break;
+            
+            } case ESTADOS::MAQUINA_BLOQUEADA: {
+                CONTROLADOR_SOCKETS::dispositivoBloqueado();
                 break;
 
             } default: {

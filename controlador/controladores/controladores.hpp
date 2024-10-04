@@ -115,6 +115,9 @@ namespace CONTROLADOR_SOCKETS {
 
     // Espera la confirmacion de la conexion al servidor sockets.
     bool esperaConfirmacionSockets(void);
+
+    // Bloqueamos el uso de la maquina.
+    bool dispositivoBloqueado(void);
 };
 
 // Importamos las funciones de los controladores

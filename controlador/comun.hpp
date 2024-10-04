@@ -1,4 +1,14 @@
+/*
+    Ver 0.1.0: Primera version estable del firmware.
+
+    Ver 0.1.1: Bugfix, al realizar la reconexion con el servidor,
+        se muestra como estatus desconectado.
+*/
+
 #pragma ONCE
+
+// Version.
+#define VERSION "0.1.1"
 
 // Pines de salida usados.
 #define ESP_LED 2 // D4 Color AZUL
@@ -126,6 +136,9 @@ enum ESTADOS {
 
     // Estado de registro de reporte de actividad finalizada.
     REPORTE_ACTIVIDAD_FINALIZADA,
+
+    // Estado de dispositivo bloqueado por monitor.
+    MAQUINA_BLOQUEADA
 };
 
 enum EVENTOS {
@@ -302,3 +315,6 @@ unsigned long int FRECUENCIA_PARPADEO = 250;
 
 // Tiempo de temporizador.
 unsigned long int TEMPORIZADOR;
+
+// Indica si se trata de una reconexion.
+bool RECONEXION = false;

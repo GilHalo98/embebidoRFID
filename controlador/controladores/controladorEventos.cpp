@@ -16,3 +16,10 @@ bool CONTROLADOR_SOCKETS::esperaConfirmacionSockets(void) {
 
     return false;
 };
+
+bool CONTROLADOR_SOCKETS::dispositivoBloqueado(void) {
+    /*
+    * Bloqueamos el uso de la maquina.
+    */
+    return true;
+};

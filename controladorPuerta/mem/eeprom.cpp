@@ -74,5 +74,20 @@ bool EEPROM_MEM::cargarConfiguracion(void) {
     // Cargamos la ip del servidor api en la configuracion.
     IP_API = configuracion.ipApi;
 
+    Serial.print("[PUERTO]: ");
+    Serial.println(PORT_API);
+
+    Serial.print("[SSID]: ");
+    Serial.println(SSID);
+
+    Serial.print("[PASS]: ");
+    Serial.println(PASSWORD);
+
+    Serial.print("[TOKEN]: ");
+    Serial.println(ACCESS_TOKEN);
+
+    Serial.print("[IP]: ");
+    Serial.println(IP_API);
+
     return true;
 };

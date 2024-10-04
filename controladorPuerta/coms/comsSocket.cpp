@@ -12,13 +12,23 @@ void COMS_SOCKETS::handlerEventosSocket(
             Serial.printf("[IOc] Disconnected!\n");
 
             // Hacemos que el led del node parpadee.
-            digitalWrite(NODE_LED, !digitalRead(NODE_LED));
+            digitalWrite(ESP_LED, !digitalRead(ESP_LED));
 
             // Establecemos el estatus como desconectado.
             ESTATUS_DISPOSITIVO =  ESTATUS::DESCONECTADO;
 
+            // Esperamos 1 segundo para intentar la reconexion con
+            // el servidor socket.
+            delay(2000);
+
             // Desactivamos la identificacion.
             IDENTIFICARSE = false;
+
+            // Activamos la reconexion del dispositivo al servidor.
+            RECONEXION = true;
+
+            // Esperamos la reconexion al servidor socket.
+            ESTADO = ESTADOS::ESPERA_CONEXION_SOCKETS;
 
             break;
 
@@ -33,12 +43,28 @@ void COMS_SOCKETS::handlerEventosSocket(
 
             // Cada que se recive el evento de conexion con el socket
             // server, se espera 1s para enviar el estatus de conectado.
-            delay(1000);
+            delay(2000);
 
             // Apagamos el led del node.
-            digitalWrite(NODE_LED, HIGH);
+            digitalWrite(ESP_LED, LOW);
 
-            // Al confirmar la conexion al socket server, pasamos al estado
+            if(RECONEXION) {
+                /*
+                * Esto podria ser mejor enviar un evento de reconexion
+                * el cual haria que el servidor pregunte por el estatus
+                * del dispositivo.
+                */
+                Serial.println("Iniciando Reconexion");
+
+                // Si es una reconexion, esperamos 2
+                // segundos adicionales.
+                delay(2000);
+
+                // Desactivamos la reconexion.
+                RECONEXION = true;
+            }
+
+            // Si se reintento la conexion, se pasa al estado
             // de inicializacion de perifericos.
             ESTADO = ESTADOS::INICIALIZAR_PERIFERICOS;
 
@@ -80,7 +106,7 @@ void COMS_SOCKETS::handlerEventosSocket(
 bool COMS_SOCKETS::inicializarSockets(void) {
     Socket.setAuthorization(ACCESS_TOKEN);
     Socket.begin(IP_API, PORT_API, "/socket.io/?EIO=4");
-    Socket.onEvent(handlerEventosSocket);
+    Socket.onEvent(COMS_SOCKETS::handlerEventosSocket);
     // Lo mandamos a un estado de espera de conexion con socket server
     // exitosa.
     return true;
@@ -91,7 +117,7 @@ bool COMS_SOCKETS::reportarEstatusDispositivo(void) {
     DynamicJsonDocument buffer(1024);
     JsonArray array = buffer.to<JsonArray>();
 
-    // add evnet name
+    // add event name
     // Hint: socket.on('event_name', ....
     array.add("reportar_status");
 
@@ -158,6 +184,16 @@ bool COMS_SOCKETS::procesarEventosPersonalizados(void) {
             // Hacemos toggle a la variable que indica al dispostivo
             // identificarse.
             IDENTIFICARSE = !IDENTIFICARSE;
+
+            // Si se deja de identificar.
+            if(!IDENTIFICARSE) {
+                // Si el estatus es ocupado, entonces apagamos el led indicador.
+                if(ESTATUS_DISPOSITIVO == ESTATUS::OCUPADO) {
+                    digitalWrite(LED_IDENTIFICACION, HIGH);
+                } else {
+                    digitalWrite(LED_IDENTIFICACION, LOW);
+                }
+            }
         }
 
         // Si el evento es de tipo abrir_puerta, abrimos

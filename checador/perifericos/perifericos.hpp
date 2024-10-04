@@ -12,6 +12,12 @@ namespace GPIO {
 
     // Realiza un toggle sobre el pin dado.
     bool toggleGPIO(int);
+
+    // Activa el led de error e inicia su timer.
+    bool identificarError(void);
+
+    // Activa el buzzer e inicia su timer.
+    bool activarBuzzer(void);
 };
 
 namespace RFID {

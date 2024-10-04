@@ -1,9 +1,54 @@
+/*       
+           |______________________|
+    [ ] A0 | ADC           GPIO16 | D0 [X] ---> BUZZER
+    [ ] GN | RESERV        GPIO05 | D1 [X] ---> LED_OK
+    [ ] VV | RESERV        GPIO04 | D2 [X] ---> LED_ERROR
+    [ ] S3 | GPIO10        GPIO00 | D3 [X] ---> LECTOR RFID
+    [ ] S2 | GPIO09        GPIO02 | D4 [X] ---> ESP_LED
+    [ ] S1 | GPIO08          3.3V | 3V [=]
+    [ ] SC | GPIO11           GND | GN [=]
+    [ ] SO | GPIO07        GPIO14 | D5 [X] ---> LECTOR RFID
+    [ ] SK | GPIO06        GPIO12 | D6 [X] ---> LECTOR RFID
+    [=] GN | GND           GPIO13 | D7 [X] ---> LECTOR RFID
+    [=] 3V | 3.3V          GPIO15 | D8 [X] ---> LECTOR RFID
+    [ ] EN | RST           GPIO03 | RX [ ]
+    [ ] RS | RST           GPIO01 | TX [ ]
+    [ ] GN | GND              GND | GN [=]
+    [ ] Vi | VCC             3.3V | 3V [=]
+           |______________________|
+
+    Ver 0.1.0: Primera version estable del firmware.
+
+    Ver 0.1.1: Bugfix, al realizar la reconexion con el servidor,
+        se muestra como estatus desconectado.
+
+    Ver 0.1.2: Se agrego el display lcd.
+
+    Ver 0.1.3: Bugfix, al recivir respuesta del servidor API revisa
+        el codigo de respuesta de manera correcta.
+
+    Ver 0.1.4: Bugfix, parametro de verificar registro de empleado se cambio.
+
+    Ver 0.1.5: Se removio el display lcd y se agregaron leds para mostrar
+        estado de dispositivo.
+
+    Ver 0.1.6: Se agrego un buzzer zumbador al dispositivo.
+*/
+
 #pragma ONCE
+
+// Version.
+#define VERSION "0.1.6"
 
 // Pines de salida usados.
 #define ESP_LED 2 // Color AZUL
-#define NODE_LED 16   // Color ROJO
+#define NODE_LED 16 // Color ROJO
+
 #define LED_IDENTIFICACION 2
+
+#define LED_OK 5 // Color Verde
+#define LED_ERROR 4 // Color ROJO
+#define BUZZER 16 // Buzzer Zumbador
 
 // Pines del RC522.
 #define RST_PIN 0  // D3
@@ -265,3 +310,18 @@ unsigned long int FRECUENCIA_PARPADEO = 250;
 
 // Tiempo de temporizador.
 unsigned long int TEMPORIZADOR;
+
+// Indica si se trata de una reconexion.
+bool RECONEXION = false;
+
+// Timer para el buzzer.
+unsigned long int TIMER_BUZZER = 0;
+
+// Tiempo que dura el buzzer encendido.
+unsigned long int TIEMPO_ENCENDIDO_BUZZER = 250;
+
+// Timer para el apagado del led de error.
+unsigned long int TIMER_LED_ERROR = 0;
+
+// Tiempo que dura el led encendido.
+unsigned int TIEMPO_ENCENDIDO_LED_ERROR = 1000;

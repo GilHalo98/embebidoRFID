@@ -21,7 +21,7 @@ respuestaIoT INTERFAZ::validarRegistroEmpleado(void) {
         + String(PORT_API)
         + String(VERSION_API)
         + String(ENDPOINTS::validarRegistroEmpleado)
-        + String("?id=")
+        + String("?idEmpleadoVinculado=")
         + String(ID_EMPLEADO);
 
     // Instanciamos el modelo de la respuesta del servidor.

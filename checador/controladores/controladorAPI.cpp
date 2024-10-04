@@ -8,11 +8,14 @@ bool CONTROLADOR_API::verificarEstadoApi(void) {
      * */
 
     // Consultamos el estado de la API.
-    respuestaIoT verificacion = INTERFAZ::verificarConexionApi();
+    respuestaIoT respuesta = INTERFAZ::verificarConexionApi();
+
+    Serial.print("[API] CODIGO DE RESPUESTA DE API: ");
+    Serial.println(respuesta.codigoRespuesta);
 
     // Si el codigo de la respuesta es menor que 0, ocurrio
     // un problema de conexion con la api.
-    if(verificacion.codigoRespuesta < 0) {
+    if(respuesta.codigoRespuesta != 0) {
         // En caso de error de conexion, mandamos el estado
         // a error de conexion con api.
         ESTADO = ESTADOS::ERROR_CONEXION_API;
@@ -34,13 +37,16 @@ bool CONTROLADOR_API::validarExistenciaEmpleado(void) {
     **/
 
     // Consultamos si el registro existe en la base de datos.
-    respuestaIoT validacion = INTERFAZ::validarRegistroEmpleado();
+    respuestaIoT respuesta = INTERFAZ::validarRegistroEmpleado();
+
+    Serial.print("[API] CODIGO DE RESPUESTA DE API: ");
+    Serial.println(respuesta.codigoRespuesta);
 
     // Si el codigo de la respuesta es menor que 0, ocurrio un problema con
     // el API.
-    if(validacion.codigoRespuesta >= 0) {
+    if(respuesta.codigoRespuesta >= 0) {
         // Si el codigo es 0, no hubo problema en la consulta.
-        if(validacion.codigoRespuesta == 0) {
+        if(respuesta.codigoRespuesta == 0) {
             // Cambiamos el ESTADO para la validacion de permisos.
             ESTADO = ESTADOS::REPORTE_CHEQUEO;
 
@@ -67,11 +73,17 @@ bool CONTROLADOR_API::reporteChequeo(void) {
     // Realizamos el registro del reporte.
     respuestaIoT respuesta = INTERFAZ::registrarReporteChequeo();
 
+    Serial.print("[API] CODIGO DE RESPUESTA DE API: ");
+    Serial.println(respuesta.codigoRespuesta);
+
     // Si el codigo de la respuesta es menor que 0, ocuio un problema con
     // el API.
     if(respuesta.codigoRespuesta >= 0) {
         // Si el codigo es 0, no hubo problema en la consulta.
         if(respuesta.codigoRespuesta == 0) {
+            // Activamos el buzzer.
+            GPIO::activarBuzzer();
+
             // Cambiamos el ESTADO para la espera de ingreso de la tarjeta.
             ESTADO = ESTADOS::ESPERA_TARJETA;
 
@@ -80,6 +92,7 @@ bool CONTROLADOR_API::reporteChequeo(void) {
             // se cambia el ESTADO al ESTADO de fallo de registro.
             ESTADO = ESTADOS::REGISTRO_REPORTE_FALLIDO;
         }
+
     } else {
         // Si no se pudo comunicar con la API, se manda al
         // ESTADO de error de API.
@@ -96,6 +109,9 @@ bool CONTROLADOR_API::reporteErrorAutentificacionTarjeta(void) {
     * de los empleados.
     **/
     respuestaIoT respuesta = INTERFAZ::registrarReporteErrorAutentificacionTarjeta();
+
+    Serial.print("[API] CODIGO DE RESPUESTA DE API: ");
+    Serial.println(respuesta.codigoRespuesta);
 
     // Si el codigo de la respuesta es menor que 0, ocurrio un problema con
     // el API.
@@ -125,6 +141,9 @@ bool CONTROLADOR_API::reporteEmpleadoInexistente(void) {
     * no coinciden con ningún registro en la base de datos.
     **/
     respuestaIoT respuesta = INTERFAZ::registrarReporteEmpleadoInexistente();
+
+    Serial.print("[API] CODIGO DE RESPUESTA DE API: ");
+    Serial.println(respuesta.codigoRespuesta);
 
     // Si el codigo de la respuesta es menor que 0, ocurrio un problema con
     // el API.

@@ -37,6 +37,9 @@ bool CONTROLADOR_INICIALIZAR::inicializarPerifericos(void) {
     // Bandera de inicializacion ok.
     bool initOK = false;
 
+    // Inicializamos los GPIOS.
+    initOK = GPIO::inicializarGPIO();
+
     // Inicializamos el RC522.
     initOK = RFID::inicializarRFID();
 

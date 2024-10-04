@@ -10,8 +10,14 @@ bool CONTROLADOR_ERROR::errorAPI(void) {
     // Imprimimos que ocurrio un error con la API.
     Serial.println("Error al conectar con API");
 
-    // Cambiamos el estado a halt.
-    ESTADO = ESTADOS::HALT;
+    // Hacemos que el led del node parpadee.
+    digitalWrite(ESP_LED, !digitalRead(ESP_LED));
+
+    // Esperamos 1 segundo para probar el estado del api.
+    delay(1000);
+
+    // Cambiamos el estado a probar la conexion con el api.
+    ESTADO = ESTADOS::PROBAR_CONEXION_API;
 
     return true;
 };
@@ -23,6 +29,9 @@ bool CONTROLADOR_ERROR::errorRegistroReporte(void) {
 
     // Imprimimos que ocurrio un error al registrar un reporte.
     Serial.println("Error al intentar registrar un reporte");
+
+    // Activamos el led de error.
+    GPIO::identificarError();
 
     // Cambiamos el estado al estado de espera de tarjeta.
     ESTADO = ESTADOS::ESPERA_TARJETA;

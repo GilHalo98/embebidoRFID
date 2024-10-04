@@ -40,6 +40,9 @@ bool CONTROLADOR_RFID::autentificarTarjeta(void) {
         return true;
     }
 
+    // Activamos el led de error.
+    GPIO::identificarError();
+
     // Si no, entonces se pasa al ESTADO de error de autentificacion
     // de bloques de tarjeta.
     ESTADO = ESTADOS::REPORTE_ERROR_AUTENTIFICACION;
@@ -57,6 +60,9 @@ bool CONTROLADOR_RFID::leerDatosTarjeta(void) {
 
     // Si la lectura fallo.
     if(!lecturaOK) {
+        // Activamos el led de error.
+        GPIO::identificarError();
+
         // Esperamos a que ingrese nuevamente la tarjeta.
         ESTADO = ESTADOS::ESPERA_TARJETA;
     }

@@ -54,6 +54,9 @@ bool EEPROM_MEM::guardarConfiguracion(void) {
     // Guardamos el puerto del servidor api en la configuración.
     configuracion.portApi = PORT_API;
 
+    // Guardamos la opcion de generar el reporte de salida de zona.
+    configuracion.registrarReporteSalida = REGISTRAR_REPORTE_SALIDA;
+
     // Ponemos la estructua en la memoria EEPROM, que en este
     // caso especifico es simulada por la memoria FLASH.
     EEPROM.put(0, configuracion);
@@ -65,6 +68,9 @@ bool EEPROM_MEM::guardarConfiguracion(void) {
     Serial.println(configuracion.permisoPedido);
 
     Serial.print("[ACCION OPCIONAL]: ");
+    Serial.println(configuracion.accionOpcional);
+
+    Serial.print("[GENERAR REPORTE DE SALIDA]: ");
     Serial.println(configuracion.accionOpcional);
 
     Serial.print("[SSID]: ");
@@ -119,11 +125,17 @@ bool EEPROM_MEM::cargarConfiguracion(void) {
     // Cargamos la accion opcional del dispositivo.
     ACCION_OPCIONAL = configuracion.accionOpcional;
 
+    // Cargamos la opcion de generar el reporte de salida de zona.
+    REGISTRAR_REPORTE_SALIDA = configuracion.registrarReporteSalida;
+
     Serial.print("[PERMISO]: ");
     Serial.println(PERMISO_PEDIDO);
 
     Serial.print("[ACCION OPCIONAL]: ");
     Serial.println(ACCION_OPCIONAL);
+
+    Serial.print("[GENERAR REPORTE DE SALIDA]: ");
+    Serial.println(REGISTRAR_REPORTE_SALIDA);
 
     Serial.print("[PUERTO]: ");
     Serial.println(PORT_API);

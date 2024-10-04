@@ -47,6 +47,13 @@ void loop(void) {
 
         // El estatus anterior lo tomamos del estatus actual.
         ESTATUS_DISPOSITIVO_ANTERIOR = ESTATUS_DISPOSITIVO;
+
+        // Si el estatus es ocupado, entonces apagamos el led indicador.
+        if(ESTATUS_DISPOSITIVO == ESTATUS::OCUPADO) {
+            digitalWrite(LED_IDENTIFICACION, HIGH);
+        } else {
+            digitalWrite(LED_IDENTIFICACION, LOW);
+        }
     }
 
     // Si el dispositivo recivo el evento de identificarse
@@ -58,6 +65,36 @@ void loop(void) {
 
             // Actualizamos el tiempo.
             TEMPORIZADOR = millis();
+        }
+    }
+
+    // Si el dispositivo se encuentra en un esatus de error parpadeamos
+    // el led que indica error.
+    if(ESTATUS_DISPOSITIVO == ESTATUS::ERROR) {
+        if(millis() - TEMPORIZADOR >= FRECUENCIA_PARPADEO) {
+            // Realizamos un toggle del led indicador.
+            GPIO::toggleGPIO(LED_ERROR);
+
+            // Actualizamos el tiempo.
+            TEMPORIZADOR = millis();
+        }
+    }
+
+    // Si el led indicador de error esta encendido.
+    if(digitalRead(LED_ERROR)) {
+        // Si el temporizador del led de error llega al tiempo maximo.
+        if(millis() - TIMER_LED_ERROR >= TIEMPO_ENCENDIDO_LED_ERROR) {
+            // Se apaga el led indicador.
+            digitalWrite(LED_ERROR, LOW);
+        }
+    }
+
+    // Si el led indicador de ok esta encendido.
+    if(digitalRead(LED_OK)) {
+        // Si el temporizador del led de ok llega al tiempo maximo.
+        if(millis() - TIMER_LED_OK >= TIEMPO_ENCENDIDO_LED_OK) {
+            // Se apaga el led indicador.
+            digitalWrite(LED_OK, LOW);
         }
     }
 

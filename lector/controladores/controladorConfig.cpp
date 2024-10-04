@@ -119,6 +119,19 @@ bool CONTROLADOR_CONFIGURACION::configurarVariables(void) {
             Serial.println(FLAGS::ESCRITURA_TERMINADA);
             break;
 
+        } case EVENTOS::CAMBIAR_REGISTRAR_REPORTE_SALIDA: {
+            Serial.print("Ingresa si REGISTRAR REPORTE SALIDA: ");
+            if(Serial.available() > 0) {
+                REGISTRAR_REPORTE_SALIDA = Serial.parseInt();
+
+                Serial.println(REGISTRAR_REPORTE_SALIDA);
+            } else {
+                Serial.println("No hay informacion recivida");
+            }
+            Serial.println("\r\n");
+            Serial.println(FLAGS::ESCRITURA_TERMINADA);
+            break;
+
         } case EVENTOS::FINALIZAR_CONFIGURACION: {
             Serial.println("Guardando configuracion...");
 

@@ -42,9 +42,10 @@ respuestaIoT INTERFAZ::registrarReporteAcceso(void) {
         // Generamos el cuerpo del post.
         String body = String("idEmpleadoVinculado=")
             + String(ID_EMPLEADO)
-
             + String("&resolucion=")
-            + String(ACCESO_GARANTIZADO);
+            + String(ACCESO_GARANTIZADO)
+            + String("&salida=")
+            + String(REGISTRAR_REPORTE_SALIDA);
 
         Serial.print("[HTTP] POST...\n");
 

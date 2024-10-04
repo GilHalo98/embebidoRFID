@@ -1,13 +1,51 @@
+/*
+           |______________________|
+    [ ] A0 | ADC           GPIO16 | D0 [X] ---> NODE_LED
+    [ ] GN | RESERV        GPIO05 | D1 [X] ---> LED_OK
+    [ ] VV | RESERV        GPIO04 | D2 [X] ---> LED_ERROR
+    [ ] S3 | GPIO10        GPIO00 | D3 [X] ---> LECTOR RFID
+    [ ] S2 | GPIO09        GPIO02 | D4 [X] ---> ESP_LED
+    [ ] S1 | GPIO08          3.3V | 3V [=]
+    [ ] SC | GPIO11           GND | GN [=]
+    [ ] SO | GPIO07        GPIO14 | D5 [X] ---> LECTOR RFID
+    [ ] SK | GPIO06        GPIO12 | D6 [X] ---> LECTOR RFID
+    [=] GN | GND           GPIO13 | D7 [X] ---> LECTOR RFID
+    [=] 3V | 3.3V          GPIO15 | D8 [X] ---> LECTOR RFID
+    [ ] EN | RST           GPIO03 | RX [ ]
+    [ ] RS | RST           GPIO01 | TX [ ]
+    [ ] GN | GND              GND | GN [=]
+    [ ] Vi | VCC             3.3V | 3V [=]
+           |______________________|
+
+    Ver 0.1.0: Primera version estable del firmware.
+
+    Ver 0.1.1: Bugfix, al realizar la reconexion con el servidor,
+        se muestra como estatus desconectado.
+
+    Ver 0.1.2: Bugfix, al recivir respuesta del servidor API revisa
+        el codigo de respuesta de manera correcta.
+
+    Ver 0.1.3: Se agrego la opcion de generar un reporte de
+        salida de zona.
+
+    Ver 0.1.4: Se agregaron leds para mostrar estado de dispositivo.
+*/
+
 #pragma ONCE
+
+// Version.
+#define VERSION "0.1.4"
 
 // Pines de salida usados.
 #define ESP_LED 2 // Color AZUL
-#define NODE_LED 16   // Color ROJO
+#define NODE_LED 16 // Color ROJO
+#define LED_IDENTIFICACION 2
+#define LED_OK 5 // Color Verde
+#define LED_ERROR 4 // Color ROJO
 
 // Pines del RC522.
 #define RST_PIN 0  // D3
 #define SS_PIN 15  // D8
-#define LED_IDENTIFICACION 2
 
 // Librerias incluidas
 #include <SPI.h>
@@ -30,6 +68,9 @@ struct CONFIGURACION_DISPOSITIVO {
 
     // Acciones opcionales.
     int accionOpcional;
+
+    // Indica si registrar un reporte de salida de zona.
+    bool registrarReporteSalida;
 
     // Access token.
     char accessToken[255];
@@ -152,6 +193,9 @@ enum EVENTOS {
 
     // Cambia la accion opcional del dispositivo.
     CAMBIAR_ACCION_OPCIONAL,
+
+    // Cambia la opcion de generar un reporte de salida de zona.
+    CAMBIAR_REGISTRAR_REPORTE_SALIDA,
 
     // Evento de finalizacion de configuracion
     FINALIZAR_CONFIGURACION
@@ -279,6 +323,9 @@ bool ACCESO_GARANTIZADO = false;
 // Accion opcional del lector.
 int ACCION_OPCIONAL = 0;
 
+// Indica si registrar un reporte de salida de zona.
+bool REGISTRAR_REPORTE_SALIDA = false;
+
 // Bit de acceso pedido.
 int PERMISO_PEDIDO = 0;
 
@@ -309,3 +356,18 @@ unsigned long int FRECUENCIA_PARPADEO = 250;
 
 // Tiempo de temporizador.
 unsigned long int TEMPORIZADOR;
+
+// Indica si se trata de una reconexion.
+bool RECONEXION = false;
+
+// Timer para el apagado del led de error.
+unsigned long int TIMER_LED_ERROR = 0;
+
+// Tiempo que dura el led encendido.
+unsigned int TIEMPO_ENCENDIDO_LED_ERROR = 1000;
+
+// Timer para el apagado del led de ok.
+unsigned long int TIMER_LED_OK = 0;
+
+// Tiempo que dura el led encendido.
+unsigned int TIEMPO_ENCENDIDO_LED_OK = 1000;

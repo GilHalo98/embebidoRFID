@@ -14,7 +14,7 @@ bool GPIO::inicializarGPIO(void) {
     pinMode(LED_ERROR, OUTPUT);
 
     // Indicamos el estado de las salidas digitales
-    digitalWrite(LED_OK, LOW);
+    digitalWrite(LED_OK, HIGH);
     digitalWrite(LED_ERROR, LOW);
 
     return true;
@@ -53,7 +53,7 @@ bool GPIO::identificarOK(void) {
     TIMER_LED_OK = millis();
 
     // Encendemos el led de ok.
-    digitalWrite(LED_OK, HIGH);
+    digitalWrite(LED_OK, LOW);
 
     return true;
 };

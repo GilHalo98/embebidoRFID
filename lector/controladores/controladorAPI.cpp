@@ -81,9 +81,6 @@ bool CONTROLADOR_API::reporteAcceso(void) {
     if(respuesta.codigoRespuesta >= 0) {
         // Si el codigo es 0, no hubo problema en la consulta.
         if(respuesta.codigoRespuesta == 0) {
-            // Activamos el led de OK.
-            GPIO::identificarOK();
-
             // Cambiamos el ESTADO para la espera de ingreso de la tarjeta.
             ESTADO = ESTADOS::ESPERA_TARJETA;
 

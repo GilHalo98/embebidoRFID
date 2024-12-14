@@ -14,13 +14,10 @@ void COMS_SOCKETS::handlerEventosSocket(
             // Hacemos que el led del node parpadee.
             digitalWrite(ESP_LED, !digitalRead(ESP_LED));
 
-            // Hacemos que el led indicador del dispositivo parpadee.
-            digitalWrite(LED_OK, !digitalRead(LED_OK));
-
             // Establecemos el estatus como desconectado.
             ESTATUS_DISPOSITIVO =  ESTATUS::DESCONECTADO;
 
-            // Esperamos 1 segundo para intentar la reconexino con
+            // Esperamos 1 segundo para intentar la reconexion con
             // el servidor socket.
             delay(2000);
 
@@ -51,9 +48,6 @@ void COMS_SOCKETS::handlerEventosSocket(
             // Apagamos el led del node.
             digitalWrite(ESP_LED, LOW);
 
-            // Hacemos que el led indicador del dispositivo parpadee.
-            digitalWrite(LED_OK, LOW);
-
             if(RECONEXION) {
                 /*
                 * Esto podria ser mejor enviar un evento de reconexion
@@ -82,8 +76,8 @@ void COMS_SOCKETS::handlerEventosSocket(
             // Recuperamos el evento recivido y sus argumentos.
             EVENTO_RECIVIDO = (char *) payload;
 
-            // Procesa los eventos personalizados recividos por sockets.
-            procesarEventosPersonalizados();
+            // Procesamos los eventos personalizados.
+            COMS_SOCKETS::procesarEventosPersonalizados();
 
             break;
 
@@ -112,7 +106,9 @@ void COMS_SOCKETS::handlerEventosSocket(
 bool COMS_SOCKETS::inicializarSockets(void) {
     Socket.setAuthorization(ACCESS_TOKEN);
     Socket.begin(IP_API, PORT_API, "/socket.io/?EIO=4");
-    Socket.onEvent(handlerEventosSocket);
+    Socket.onEvent(COMS_SOCKETS::handlerEventosSocket);
+    // Lo mandamos a un estado de espera de conexion con socket server
+    // exitosa.
     return true;
 };
 
@@ -121,7 +117,7 @@ bool COMS_SOCKETS::reportarEstatusDispositivo(void) {
     DynamicJsonDocument buffer(1024);
     JsonArray array = buffer.to<JsonArray>();
 
-    // add evnet name
+    // add event name
     // Hint: socket.on('event_name', ....
     array.add("reportar_status");
 
@@ -141,85 +137,19 @@ bool COMS_SOCKETS::reportarEstatusDispositivo(void) {
     return true;
 };
 
-bool COMS_SOCKETS::enviarPeticionAcceso(void) {
-    // creat JSON message for Socket.IO (event)
-    DynamicJsonDocument buffer(1024);
-    JsonArray array = buffer.to<JsonArray>();
-
-    // add evnet name
-    // Hint: socket.on('event_name', ....
-    array.add("peticion_acceso");
-
-    // add payload (parameters) for the event
-    JsonObject param1 = array.createNestedObject();
-    param1["resolucion"] = (uint8_t) ACCESO_GARANTIZADO;
-
-    // JSON to String (serializion)
-    String output;
-    serializeJson(buffer, output);
-
-    // Send event
-    Socket.sendEVENT(output);
-
-    return true;
-};
-
-bool COMS_SOCKETS::enviarPeticionAccesoBloqueo(void) {
-    // creat JSON message for Socket.IO (event)
-    DynamicJsonDocument buffer(1024);
-    JsonArray array = buffer.to<JsonArray>();
-
-    // add evnet name
-    // Hint: socket.on('event_name', ....
-    array.add("peticion_acceso_bloquear");
-
-    // add payload (parameters) for the event
-    JsonObject param1 = array.createNestedObject();
-    param1["resolucion"] = (uint8_t) ACCESO_GARANTIZADO;
-
-    // JSON to String (serializion)
-    String output;
-    serializeJson(buffer, output);
-
-    // Send event
-    Socket.sendEVENT(output);
-
-    return true;
-};
-
-bool COMS_SOCKETS::enviarPeticionAccesoDesbloqueo(void) {
-    // creat JSON message for Socket.IO (event)
-    DynamicJsonDocument buffer(1024);
-    JsonArray array = buffer.to<JsonArray>();
-
-    // add evnet name
-    // Hint: socket.on('event_name', ....
-    array.add("peticion_acceso_desbloquear");
-
-    // add payload (parameters) for the event
-    JsonObject param1 = array.createNestedObject();
-    param1["resolucion"] = (uint8_t) ACCESO_GARANTIZADO;
-
-    // JSON to String (serializion)
-    String output;
-    serializeJson(buffer, output);
-
-    // Send event
-    Socket.sendEVENT(output);
-
-    return true;
-};
-
 bool COMS_SOCKETS::procesarEventosPersonalizados(void) {
     /*
-    * Procesamos los eventos personalizados que lleguen por sockets.
+    * Esperamos que se emita un evento al cliente.
     */
 
     // Instanicamos un json buffer.
     JsonDocument buffer;
 
     // Deserealizamos el evento recivido.
-    DeserializationError error = deserializeJson(buffer, EVENTO_RECIVIDO);
+    DeserializationError error = deserializeJson(
+        buffer,
+        EVENTO_RECIVIDO
+    );
 
     // Si no existe error en la deserealizacion.
     if(!error) {
@@ -230,8 +160,23 @@ bool COMS_SOCKETS::procesarEventosPersonalizados(void) {
         // Recuperamos el nombre del evento en cuestion.
         String evento = buffer[0];
 
+        // Si  el evento es de tipo garantizar acceso.
+        if(evento == "garantizar_acceso") {
+            // Cambiamos el estado del dispositivo a realizar
+            // la accion programada.
+            ESTADO = ESTADOS::ABRIR_PUERTA;
+
+            // Cambiamos el estatus del dispositivo a ocupado.
+            ESTATUS_DISPOSITIVO = ESTATUS::OCUPADO;
+
+            // Indicamos que se realizara la secuencia completa de
+            // apertura/cierre de puerta.
+            EJECUTAR_SECUENCIA_COMPLETA = true;
+
+        }
+
         // Si el evento es de tipo toggle_identificarse.
-        if(evento == "toggle_identificarse") {
+        else if(evento == "toggle_identificarse") {
             if(IDENTIFICARSE) {
                 digitalWrite(LED_IDENTIFICACION, LOW);
             }
@@ -249,6 +194,83 @@ bool COMS_SOCKETS::procesarEventosPersonalizados(void) {
                     digitalWrite(LED_IDENTIFICACION, LOW);
                 }
             }
+        }
+
+        // Si el evento es de tipo abrir_puerta, abrimos
+        // la puerta y no mandamos la secuencia para cerrar la puerta.
+        else if(evento == "abrir_puerta") {
+            // Cambiamos el estado del dispositivo a realizar
+            // la accion programada.
+            ESTADO = ESTADOS::ABRIR_PUERTA;
+
+            // Cambiamos el estatus del dispositivo a ocupado.
+            ESTATUS_DISPOSITIVO = ESTATUS::OCUPADO;
+
+            // Indicamos que se realizara la secuencia completa de
+            // apertura/cierre de puerta.
+            EJECUTAR_SECUENCIA_COMPLETA = false;
+        }
+
+        // Si el evento es de tipo cerrar_puerta, cerramos la puerta.
+        else if(evento == "cerrar_puerta") {
+            // Cambiamos el estado del dispositivo a realizar
+            // la accion programada.
+            ESTADO = ESTADOS::CERRAR_PUERTA;
+
+            // Cambiamos el estatus del dispositivo a ocupado.
+            ESTATUS_DISPOSITIVO = ESTATUS::OCUPADO;
+
+            // Indicamos que se realizara la secuencia completa de
+            // apertura/cierre de puerta.
+            EJECUTAR_SECUENCIA_COMPLETA = false;
+        }
+
+        // Si el evento es de tipo bloquear_puerta bloqueamos la apertura
+        // de la puerta.
+        else if(evento == "bloquear_puerta") {
+            ESTATUS_DISPOSITIVO = ESTATUS::BLOQUEADO;
+        }
+        
+        // Si el evento es de tipo desbloquear_puerta bloqueamos la apertura
+        // de la puerta.
+        else if(evento == "desbloquear_puerta") {
+            ESTATUS_DISPOSITIVO = ESTATUS::LIBRE;
+        }
+
+        // Si el evento es ed tipo garantizar_acceso_bloquear realizamos
+        // el ciclo de abrir y cerrar puerta, pero bloqueamos la puerta.
+        else if(evento == "garantizar_acceso_bloquear") {
+            // Cambiamos el estado del dispositivo a realizar
+            // la accion programada.
+            ESTADO = ESTADOS::ABRIR_PUERTA;
+
+            // Cambiamos el estatus del dispositivo a ocupado.
+            ESTATUS_DISPOSITIVO = ESTATUS::OCUPADO;
+
+            // Indicamos que se bloqueara la puerta.
+            BLOQUEAR_PUERTA = true;
+
+            // Indicamos que se realizara la secuencia completa de
+            // apertura/cierre de puerta.
+            EJECUTAR_SECUENCIA_COMPLETA = true;
+        }
+
+        // Si el evento es ed tipo desbloquear_abrir_puerta realizamos
+        // el ciclo de abrir y cerrar puerta, pero desbloqueamos la puerta.
+        else if(evento == "desbloquear_abrir_puerta") {
+            // Cambiamos el estado del dispositivo a realizar
+            // la accion programada.
+            ESTADO = ESTADOS::ABRIR_PUERTA;
+
+            // Cambiamos el estatus del dispositivo a ocupado.
+            ESTATUS_DISPOSITIVO = ESTATUS::OCUPADO;
+
+            // Indicamos que se desbloqueara la puerta.
+            DESBLOQUEAR_PUERTA = true;
+
+            // Indicamos que se realizara la secuencia completa de
+            // apertura/cierre de puerta.
+            EJECUTAR_SECUENCIA_COMPLETA = true;
         }
     }
 

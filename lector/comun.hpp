@@ -29,12 +29,16 @@
         salida de zona.
 
     Ver 0.1.4: Se agregaron leds para mostrar estado de dispositivo.
+
+    Ver 0.1.5: Estado default del led ok en alto, se apaga al entrar en
+        estado de error, ocupado o desconectado, parpade al
+        desconectarse del servidor socket.
 */
 
 #pragma ONCE
 
 // Version.
-#define VERSION "0.1.4"
+#define VERSION "0.1.5"
 
 // Pines de salida usados.
 #define ESP_LED 2 // Color AZUL

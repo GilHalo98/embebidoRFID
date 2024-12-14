@@ -2,7 +2,6 @@
 #include "./mem/memoria.hpp"
 #include "./coms/coms.hpp"
 #include "./perifericos/perifericos.hpp"
-#include "./api/api.hpp"
 #include "./controladores/controladores.hpp"
 
 void setup(void) {
@@ -29,7 +28,7 @@ void loop(void) {
     // Loop del socket, maneja los eventos que llegan.
     Socket.loop();
 
-    // Muestra el estado actual del dispositivo.
+    // Muestra e estado actual del dispositivo.
     if(ESTADO != ESTADO_ANTERIOR) {
         Serial.print("Estado actual: ");
         Serial.println(ESTADO);
@@ -45,21 +44,17 @@ void loop(void) {
         // Mandamos el status del dispositivo.
         COMS_SOCKETS::reportarEstatusDispositivo();
 
+        // Mostramos el estatus actual desde la torreta.
+        GPIO::mostrarEstatusTorreta();
+
         // El estatus anterior lo tomamos del estatus actual.
         ESTATUS_DISPOSITIVO_ANTERIOR = ESTATUS_DISPOSITIVO;
 
         // Si el estatus es ocupado, entonces apagamos el led indicador.
         if(ESTATUS_DISPOSITIVO == ESTATUS::OCUPADO) {
             digitalWrite(LED_IDENTIFICACION, HIGH);
-
-            // Se apaga el led indicador.
-            digitalWrite(LED_OK, LOW);
-
         } else {
             digitalWrite(LED_IDENTIFICACION, LOW);
-
-            // Se apaga el led indicador.
-            digitalWrite(LED_OK, HIGH);
         }
     }
 
@@ -72,30 +67,6 @@ void loop(void) {
 
             // Actualizamos el tiempo.
             TEMPORIZADOR = millis();
-        }
-    }
-
-    // Si el dispositivo se encuentra en un esatus de error parpadeamos
-    // el led que indica error.
-    if(ESTATUS_DISPOSITIVO == ESTATUS::ERROR) {
-        // Se apaga el led indicador.
-        digitalWrite(LED_OK, LOW);
-
-        if(millis() - TEMPORIZADOR >= FRECUENCIA_PARPADEO) {
-            // Realizamos un toggle del led indicador.
-            GPIO::toggleGPIO(LED_ERROR);
-
-            // Actualizamos el tiempo.
-            TEMPORIZADOR = millis();
-        }
-    }
-
-    // Si el led indicador de error esta encendido.
-    if(digitalRead(LED_ERROR)) {
-        // Si el temporizador del led de error llega al tiempo maximo.
-        if(millis() - TIMER_LED_ERROR >= TIEMPO_ENCENDIDO_LED_ERROR) {
-            // Se apaga el led indicador.
-            digitalWrite(LED_ERROR, LOW);
         }
     }
 
@@ -115,10 +86,6 @@ void loop(void) {
                 CONTROLADOR_INICIALIZAR::conexionRed();
                 break;
 
-            } case ESTADOS::PROBAR_CONEXION_API: {
-                CONTROLADOR_API::verificarEstadoApi();
-                break;
-
             } case ESTADOS::INICIALIZAR_CONEXION_SOCKETS: {
                 CONTROLADOR_INICIALIZAR::inicializarConexionSockets();
                 break;
@@ -131,52 +98,32 @@ void loop(void) {
                 CONTROLADOR_INICIALIZAR::inicializarPerifericos();
                 break;
 
-            } case ESTADOS::ERROR_CONEXION_API: {
-                CONTROLADOR_ERROR::errorAPI();
-                break;
-
-            } case ESTADOS::REGISTRO_REPORTE_FALLIDO: {
-                CONTROLADOR_ERROR::errorRegistroReporte();
-                break;
-
             } case ESTADOS::ERROR_PERIFERICOS: {
                 CONTROLADOR_ERROR::errorInicializacionPerifericos();
                 break;
 
-            } case ESTADOS::ESPERA_TARJETA: {
-                CONTROLADOR_RFID::esperaTarjeta();
+            } case ESTADOS::ESPERA_EVENTO: {
+                CONTROLADOR_SOCKETS::esperarPorEvento();
                 break;
 
-            } case ESTADOS::AUTENTIFICACION_TARJETA: {
-                CONTROLADOR_RFID::autentificarTarjeta();
+            } case ESTADOS::ABRIR_PUERTA: {
+                CONTROLADOR_PERIFERICOS::abrirPuerta();
                 break;
 
-            } case ESTADOS::REPORTE_ERROR_AUTENTIFICACION: {
-                CONTROLADOR_API::reporteErrorAutentificacionTarjeta();
+            } case ESTADOS::ESPEAR_APERTURA: {
+                CONTROLADOR_PERIFERICOS::esperarApertura();
                 break;
 
-            } case ESTADOS::LEER_DATOS_TARJETA: {
-                CONTROLADOR_RFID::leerDatosTarjeta();
+            } case ESTADOS::ESPERA_PUERTA_ABIERTA: {
+                CONTROLADOR_PERIFERICOS::esperarPase();
                 break;
 
-            } case ESTADOS::VERIFICAR_EMPLEADO: {
-                CONTROLADOR_API::validarExistenciaEmpleado();
+            } case ESTADOS::CERRAR_PUERTA: {
+                CONTROLADOR_PERIFERICOS::cerrarPuerta();
                 break;
 
-            } case ESTADOS::REPORTE_DATOS_NO_COINCIDEN_CON_REGISTRO: {
-                CONTROLADOR_API::reporteEmpleadoInexistente();
-                break;
-
-            } case ESTADOS::VALIDAR_ACCESO_EMPLEADO: {
-                CONTROLADOR_ACCESOS::validarAcceso();
-                break;
-
-            } case ESTADOS::ENVIAR_EVENTO_ACCESO: {
-                CONTROLADOR_SOCKETS::enviarEventoAcceso();
-                break;
-
-            } case ESTADOS::REPORTE_ACCESO: {
-                CONTROLADOR_API::reporteAcceso();
+            } case ESTADOS::ESPEAR_CIERRE: {
+                CONTROLADOR_PERIFERICOS::esperarCierre();
                 break;
 
             } default: {

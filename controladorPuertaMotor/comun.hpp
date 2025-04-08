@@ -3,12 +3,14 @@
 
     Ver 0.1.1: Bugfix, al realizar la reconexion con el servidor,
         se muestra como estatus desconectado.
+
+    Ver 0.1.2: Se agrego constante para el tiempo de activación del motor.
 */
 
 #pragma ONCE
 
 // Version.
-#define VERSION "0.1.1"
+#define VERSION "0.1.2"
 
 // Pines de salida usados.
 #define ESP_LED 2 // Color AZUL
@@ -233,6 +235,12 @@ bool BLOQUEAR_PUERTA = false;
 
 // Indica si la puerta sera desbloqueada.
 bool DESBLOQUEAR_PUERTA = false;
+
+// Tiempo de actividad del motor.
+unsigned long int TIEMPO_ACTIVIDAD_MOTOR = 3650;
+
+// Tiempo de actividad para abrir el motor.
+unsigned long int TIEMPO_ACTIVIDAD_MOTOR_ABRIR
 
 // Frecuencia de actualizacion del manager de estados.
 unsigned long int FRECUENCIA_ACTUALIZACION_MAIN = 100;

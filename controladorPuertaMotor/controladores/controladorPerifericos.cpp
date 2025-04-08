@@ -9,7 +9,8 @@ bool CONTROLADOR_PERIFERICOS::abrirPuerta(void) {
 
 // Esperamos a que la puerta sea abierta.
 bool CONTROLADOR_PERIFERICOS::esperarApertura(void) {
-    delay(2000);
+    // Tiempo de activación del motor para abrir/cerrar la puerta.
+    delay(TIEMPO_ACTIVIDAD_MOTOR);
 
     digitalWrite(RELE_1, HIGH);
 
@@ -40,7 +41,8 @@ bool CONTROLADOR_PERIFERICOS::cerrarPuerta(void) {
 
 // Esperamos a que la puerta sea cerrada.
 bool CONTROLADOR_PERIFERICOS::esperarCierre(void) {
-    delay(2000);
+    // Tiempo de activación del motor para abrir/cerrar la puerta.
+    delay(TIEMPO_ACTIVIDAD_MOTOR);
 
     digitalWrite(RELE_2, HIGH);
     // Cambiamos el estado por espera de evento.

@@ -33,12 +33,14 @@
         estado de dispositivo.
 
     Ver 0.1.6: Se agrego un buzzer zumbador al dispositivo.
+
+    Ver 0.1.7: El led indicador se invirtio.
 */
 
 #pragma ONCE
 
 // Version.
-#define VERSION "0.1.6"
+#define VERSION "0.1.7"
 
 // Pines de salida usados.
 #define ESP_LED 2 // Color AZUL

@@ -51,12 +51,12 @@ void loop(void) {
         // Si el estatus es ocupado, entonces apagamos el led indicador.
         if(ESTATUS_DISPOSITIVO == ESTATUS::OCUPADO) {
             digitalWrite(LED_IDENTIFICACION, HIGH);
-            digitalWrite(LED_OK, HIGH);
+            digitalWrite(LED_OK, LOW);
 
         // Si no esta ocupado, entones lo apagamos.
         } else {
             digitalWrite(LED_IDENTIFICACION, LOW);
-            digitalWrite(LED_OK, LOW);
+            digitalWrite(LED_OK, HIGH);
         }
     }
 

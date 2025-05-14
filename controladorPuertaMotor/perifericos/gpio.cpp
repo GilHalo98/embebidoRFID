@@ -15,6 +15,10 @@ bool GPIO::inicializarGPIO(void) {
     pinMode(RELE_3, OUTPUT);
     pinMode(RELE_4, OUTPUT);
 
+    // Indicamos el uso de los pines como entradas digitales.
+    pinMode(SENSOR_PUERTA_ABIERTA, INPUT);
+    pinMode(SENSOR_PUERTA_CERRADA, INPUT);
+
     // Indicamos el estado de las salidas digitales
     digitalWrite(RELE_1, HIGH);
     digitalWrite(RELE_2, HIGH);
@@ -48,4 +52,18 @@ bool GPIO::mostrarEstatusTorreta(void) {
     }
 
     return true;
+};
+
+bool GPIO::puertaEstaAbierta(void) {
+    /*
+    * Identifica si la puerta esta abierta.
+    */
+    return digitalRead(SENSOR_PUERTA_ABIERTA);
+};
+
+bool GPIO::puertaEstaCerrada(void) {
+    /*
+    * Identifica si la puerta esta cerrada.
+    */
+    return digitalRead(SENSOR_PUERTA_CERRADA);
 };

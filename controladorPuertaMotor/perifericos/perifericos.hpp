@@ -15,6 +15,12 @@ namespace GPIO {
 
     // Mostramos el estatus del dispositivo desde la torreta.
     bool mostrarEstatusTorreta(void);
+
+    // Indica si la puerta esta abierta.
+    bool puertaEstaAbierta(void);
+
+    // Indica si la puerta esta cerrada.
+    bool puertaEstaCerrada(void);
 };
 
 // Incluimos las funciones.

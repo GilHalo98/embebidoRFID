@@ -61,6 +61,9 @@ namespace CONTROLADOR_PERIFERICOS {
     * Controladores de los perifericos.
     */
 
+    // Mandamos a home la puerta.
+    bool enviarPuertaHome(void);
+
     // Esperamos un tiempo y despues cerramos la puerta.
     bool esperarPase(void);
 

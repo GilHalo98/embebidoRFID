@@ -1,4 +1,4 @@
-/*       
+/*
            |______________________|
     [ ] A0 | ADC           GPIO16 | D0 [X] ---> BUZZER
     [ ] GN | RESERV        GPIO05 | D1 [X] ---> LED_OK

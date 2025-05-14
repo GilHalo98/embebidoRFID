@@ -1,5 +1,32 @@
+// Mandamos a home la puerta.
+bool CONTROLADOR_PERIFERICOS::enviarPuertaHome(void) {
+    /*
+    * Enviamos la pueta a posicion Home.
+    */
+
+    // Esperamos a que cierre la puerta.
+    if(!GPIO::puertaEstaCerrada()) {
+        // Si la puerta no esta cerrada, entonces cerramos la puerta.
+        digitalWrite(RELE_2, LOW);
+
+        return false;
+    }
+
+    // Desactivamos el rele del motor.
+    digitalWrite(RELE_2, HIGH);
+
+    // Cambiamos de estado a esperar por evento.
+    ESTADO = ESTADOS::ESPERA_EVENTO;
+
+    // Cambiamos el status del dispositivo.
+    ESTATUS_DISPOSITIVO = ESTATUS::LIBRE;
+
+    return true;
+};
+
 // Abrimos la puerta.
 bool CONTROLADOR_PERIFERICOS::abrirPuerta(void) {
+    // Activamos el rele del motor.
     digitalWrite(RELE_1, LOW);
 
     // Cambiamos el estado por espera de evento.
@@ -9,9 +36,12 @@ bool CONTROLADOR_PERIFERICOS::abrirPuerta(void) {
 
 // Esperamos a que la puerta sea abierta.
 bool CONTROLADOR_PERIFERICOS::esperarApertura(void) {
-    // Tiempo de activación del motor para abrir/cerrar la puerta.
-    delay(TIEMPO_ACTIVIDAD_MOTOR);
+    // Esperamos a que la puerta abra.
+    if(!GPIO::puertaEstaAbierta()) {
+        return false;
+    }
 
+    // Desactivamos el rele del motor.
     digitalWrite(RELE_1, HIGH);
 
     if(EJECUTAR_SECUENCIA_COMPLETA) {
@@ -33,7 +63,9 @@ bool CONTROLADOR_PERIFERICOS::esperarApertura(void) {
 
 // cerramos la puerta.
 bool CONTROLADOR_PERIFERICOS::cerrarPuerta(void) {
+    // Activamos el rele del motor.
     digitalWrite(RELE_2, LOW);
+
     // Cambiamos el estado por espera de evento.
     ESTADO = ESTADOS::ESPEAR_CIERRE;
     return true;
@@ -41,10 +73,14 @@ bool CONTROLADOR_PERIFERICOS::cerrarPuerta(void) {
 
 // Esperamos a que la puerta sea cerrada.
 bool CONTROLADOR_PERIFERICOS::esperarCierre(void) {
-    // Tiempo de activación del motor para abrir/cerrar la puerta.
-    delay(TIEMPO_ACTIVIDAD_MOTOR);
+    // Esperamos a que se detecte la puerta cerrada.
+    if(!GPIO::puertaEstaCerrada()) {
+        return false;
+    }
 
+    // Desactivamos el rele del motor.
     digitalWrite(RELE_2, HIGH);
+
     // Cambiamos el estado por espera de evento.
     ESTADO = ESTADOS::ESPERA_EVENTO;
 
@@ -72,9 +108,10 @@ bool CONTROLADOR_PERIFERICOS::esperarCierre(void) {
 
 bool CONTROLADOR_PERIFERICOS::esperarPase(void) {
     // Espera un tiempo para que la puerta sea cerrada.
-    if(millis() % 5000 == 0) {
-        ESTADO = ESTADOS::CERRAR_PUERTA;
-    }
+    delay(TIEMPO_PUERTA_ABIERTA);
+
+    // Cambiamos de estado a cerrar puerta.
+    ESTADO = ESTADOS::CERRAR_PUERTA;
 
     return true;
-}
+};

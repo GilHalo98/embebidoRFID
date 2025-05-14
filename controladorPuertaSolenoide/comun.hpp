@@ -1,4 +1,22 @@
 /*
+           |______________________|
+    [ ] A0 | ADC           GPIO16 | D0 [X] ---> NODE_LED
+    [ ] GN | RESERV        GPIO05 | D1 [X] ---> RELE_1
+    [ ] VV | RESERV        GPIO04 | D2 [X] ---> RELE_2
+    [ ] S3 | GPIO10        GPIO00 | D3 [X] --->
+    [ ] S2 | GPIO09        GPIO02 | D4 [X] ---> ESP_LED
+    [ ] S1 | GPIO08          3.3V | 3V [=]
+    [ ] SC | GPIO11           GND | GN [=]
+    [ ] SO | GPIO07        GPIO14 | D5 [X] ---> RELE_3
+    [ ] SK | GPIO06        GPIO12 | D6 [X] ---> RELE_4
+    [=] GN | GND           GPIO13 | D7 [ ]
+    [=] 3V | 3.3V          GPIO15 | D8 [ ]
+    [ ] EN | RST           GPIO03 | RX [ ]
+    [ ] RS | RST           GPIO01 | TX [ ]
+    [ ] GN | GND              GND | GN [=]
+    [ ] Vi | VCC             3.3V | 3V [=]
+           |______________________|
+
     Ver 0.1.0: Primera version estable del firmware.
 */
 

@@ -40,11 +40,11 @@ bool CONTROLADOR_INICIALIZAR::inicializarPerifericos(void) {
     // Verificamos si los perifericos
     // fueron inciados correctamente.
     if(initOK) {
-        // Cambiamos al ESTADO de espera de tarjeta.
-        ESTADO = ESTADOS::ESPERA_EVENTO;
+        // Cambiamos al ESTADO de enviar puerta a home de tarjeta.
+        ESTADO = ESTADOS::ENVIAR_PUERTA_HOME;
 
         // Cambiamos el status del dispositivo.
-        ESTATUS_DISPOSITIVO = ESTATUS::LIBRE;
+        ESTATUS_DISPOSITIVO = ESTATUS::OCUPADO;
 
     } else {
         // Cambiamos al ESTADO de error de perifericos.
